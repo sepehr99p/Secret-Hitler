@@ -1,0 +1,14 @@
+.idea/
+.gradle/
+build/
+obj/
+*.iml
+local.properties
+/TMessagesProj/.cxx/
+RubikaV3/debug
+RubikaV3/release
+debug
+release
+.DS_Store
+.DS_Store?
+~             
