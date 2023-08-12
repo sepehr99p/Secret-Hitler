@@ -1,12 +1,11 @@
 package com.example.secrethitler.ui.game
 
+import android.os.Handler
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.view.isVisible
+import androidx.core.os.postDelayed
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.secrethitler.data.Player
-import com.example.secrethitler.ui.utils.ViewHelper.hide
 import com.example.secrethitler.ui.utils.ViewHelper.show
 
 
@@ -31,15 +30,14 @@ class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMP
     override fun onBindViewHolder(holder: PlayerRoleViewHolder, position: Int) {
         holder.bind(getItem(position))
         holder.itemView.setOnClickListener {
-            if (holder.binding.playerRoleTv.isVisible && isVisible) {
-                holder.binding.playerRoleTv.hide()
-                isVisible = false
-            } else if (isVisible) {
-                //todo : his is
+            if (isVisible) {
                 return@setOnClickListener
             } else {
                 holder.binding.playerRoleTv.show()
                 isVisible = true
+                Handler().postDelayed(5000) {
+                    notifyDataSetChanged()
+                }
             }
         }
     }
