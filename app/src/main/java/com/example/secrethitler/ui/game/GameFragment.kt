@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.secrethitler.ui.MainActivity
-import com.example.secrethitler.R
 import com.example.secrethitler.data.Player
 import com.example.secrethitler.data.ROLE
 import com.example.secrethitler.databinding.FragmentGameBinding
+import com.example.secrethitler.ui.utils.ViewHelper.hide
+import com.example.secrethitler.ui.utils.ViewHelper.show
 import kotlin.random.Random
 
 class GameFragment : Fragment() {
@@ -22,6 +23,7 @@ class GameFragment : Fragment() {
     private var liberals = 0
     private var hitler = 1
     private val gamePlayers = arrayListOf<Player>()
+    private val playerRoleAdapter by lazy { PlayerRoleAdapter() }
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -29,10 +31,10 @@ class GameFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initPlayersRoles()
+        initPlayersConfig()
     }
 
-    private fun initPlayersRoles() {
+    private fun initPlayersConfig() {
         when(players.size) {
             10,9 -> {
                 fascism = 3
@@ -60,8 +62,12 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initListeners()
-        binding.playerRoleTextView.hide()
-        binding.playerNameTextView.text = players[currentPlayerIndex]
+        with(binding) {
+            playerRoleTextView.hide()
+            playerNameTextView.text = players[currentPlayerIndex]
+            playersRecyclerView.adapter = playerRoleAdapter
+            playersRecyclerView.hide()
+        }
         initRoles()
     }
 
@@ -80,18 +86,19 @@ class GameFragment : Fragment() {
                 gamePlayers.add(Player(players[i],ROLE.LIBERAL))
             }
         }
+        playerRoleAdapter.submitList(gamePlayers)
     }
 
     private fun initListeners() {
         with(binding) {
             root.setOnClickListener {
                 if (currentPlayerIndex==players.size) {
-                    clearScreen()
+                    presentInGameScreen()
                 } else {
                     if (playerRoleTextView.isVisible) {
                         currentPlayerIndex++
                         if (currentPlayerIndex==players.size) {
-                            clearScreen()
+                            presentInGameScreen()
                         } else {
                             showNextPlayer()
                         }
@@ -103,9 +110,10 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun clearScreen() {
+    private fun presentInGameScreen() {
         binding.playerRoleTextView.hide()
         binding.playerNameTextView.hide()
+        binding.playersRecyclerView.show()
     }
 
     private fun showRole() {
@@ -128,13 +136,5 @@ class GameFragment : Fragment() {
         _binding = null
     }
 
-
-    private fun View.hide() {
-        this.visibility = View.GONE
-    }
-
-    private fun View.show() {
-        this.visibility = View.VISIBLE
-    }
 
 }
