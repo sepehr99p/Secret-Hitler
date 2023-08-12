@@ -10,5 +10,7 @@ data class Player(
 enum class ROLE(val color : Int) {
     FASCISM(R.color.red),
     LIBERAL(R.color.blue),
-    HITLER(R.color.red)
+    HITLER(R.color.red),
+    COMMUNISM(R.color.brown),
+    STALIN(R.color.brown)
 }

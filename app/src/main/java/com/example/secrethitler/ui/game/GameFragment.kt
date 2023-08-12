@@ -22,6 +22,8 @@ class GameFragment : Fragment() {
     private var fascism = 0
     private var liberals = 0
     private var hitler = 1
+    private var communism = 0
+    private var stalin = 0
     private val gamePlayers = arrayListOf<Player>()
     private val playerRoleAdapter by lazy { PlayerRoleAdapter() }
 
@@ -36,6 +38,17 @@ class GameFragment : Fragment() {
 
     private fun initPlayersConfig() {
         when(players.size) {
+            12 -> {
+                communism = 1
+                stalin = 1
+                fascism = 3
+                liberals = players.size - hitler - fascism
+            }
+            11 -> {
+                stalin = 1
+                fascism = 3
+                liberals = players.size - hitler - fascism
+            }
             10,9 -> {
                 fascism = 3
                 liberals = players.size - hitler - fascism
@@ -74,13 +87,19 @@ class GameFragment : Fragment() {
     private fun initRoles() {
         for (i in 0 until players.size) {
             val random = Random(System.currentTimeMillis())
-            val nextRole = random.nextInt(hitler + liberals + fascism)
+            val nextRole = random.nextInt(hitler + liberals + fascism + stalin + communism)
             if (nextRole == hitler && (hitler > 0)) {
                 hitler = 0
                 gamePlayers.add(Player(players[i],ROLE.HITLER))
             } else if (nextRole <= (hitler+fascism) && (fascism > 0)) {
                 fascism--
                 gamePlayers.add(Player(players[i],ROLE.FASCISM))
+            } else if(nextRole <= (hitler+fascism+communism) && (communism > 0)) {
+                communism--
+                gamePlayers.add(Player(players[i],ROLE.COMMUNISM))
+            } else if(nextRole <= ((hitler+fascism+communism)+stalin) && (stalin > 0)) {
+                stalin--
+                gamePlayers.add(Player(players[i],ROLE.STALIN))
             } else {
                 liberals--
                 gamePlayers.add(Player(players[i],ROLE.LIBERAL))
