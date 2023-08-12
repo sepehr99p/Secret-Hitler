@@ -33,13 +33,21 @@ class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMP
             if (isVisible) {
                 return@setOnClickListener
             } else {
-                holder.binding.playerRoleTv.show()
-                isVisible = true
-                Handler().postDelayed(5000) {
-                    isVisible = false
-                    notifyDataSetChanged()
-                }
+                showRole(holder)
+                startTimer()
             }
+        }
+    }
+
+    private fun showRole(holder: PlayerRoleViewHolder) {
+        holder.binding.playerRoleTv.show()
+        isVisible = true
+    }
+
+    private fun startTimer() {
+        Handler().postDelayed(5000) {
+            isVisible = false
+            notifyDataSetChanged()
         }
     }
 
