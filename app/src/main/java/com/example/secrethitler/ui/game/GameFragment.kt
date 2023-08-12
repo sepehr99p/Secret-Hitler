@@ -8,6 +8,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.secrethitler.ui.MainActivity
 import com.example.secrethitler.R
+import com.example.secrethitler.data.Player
+import com.example.secrethitler.data.ROLE
 import com.example.secrethitler.databinding.FragmentGameBinding
 import kotlin.random.Random
 
@@ -19,6 +21,7 @@ class GameFragment : Fragment() {
     private var fascism = 0
     private var liberals = 0
     private var hitler = 1
+    private val gamePlayers = arrayListOf<Player>()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -59,20 +62,42 @@ class GameFragment : Fragment() {
         initListeners()
         binding.playerRoleTextView.hide()
         binding.playerNameTextView.text = players[currentPlayerIndex]
+        initRoles()
+    }
+
+    private fun initRoles() {
+        for (i in 0 until players.size) {
+            val random = Random(System.currentTimeMillis())
+            val nextRole = random.nextInt(hitler + liberals + fascism)
+            if (nextRole == hitler && (hitler > 0)) {
+                hitler = 0
+                gamePlayers.add(Player(players[i],ROLE.HITLER))
+            } else if (nextRole <= (hitler+fascism) && (fascism > 0)) {
+                fascism--
+                gamePlayers.add(Player(players[i],ROLE.FASCISM))
+            } else {
+                liberals--
+                gamePlayers.add(Player(players[i],ROLE.LIBERAL))
+            }
+        }
     }
 
     private fun initListeners() {
         with(binding) {
             root.setOnClickListener {
-                if (playerRoleTextView.isVisible) {
-                    currentPlayerIndex++
-                    if (currentPlayerIndex==players.size) {
-                        clearScreen()
-                    } else {
-                        showNextPlayer()
-                    }
+                if (currentPlayerIndex==players.size) {
+                    clearScreen()
                 } else {
-                    showRole()
+                    if (playerRoleTextView.isVisible) {
+                        currentPlayerIndex++
+                        if (currentPlayerIndex==players.size) {
+                            clearScreen()
+                        } else {
+                            showNextPlayer()
+                        }
+                    } else {
+                        showRole()
+                    }
                 }
             }
         }
@@ -86,22 +111,8 @@ class GameFragment : Fragment() {
     private fun showRole() {
         with(binding) {
             playerRoleTextView.show()
-            // todo : set the role textView here later
-            val random = Random(System.currentTimeMillis())
-            var nextRole = random.nextInt(hitler + liberals + fascism)
-            if (nextRole == hitler && (hitler > 0)) {
-                hitler = 0
-                playerRoleTextView.text = "Hitler"
-                playerRoleTextView.setTextColor(requireContext().resources.getColor(R.color.red))
-            } else if (nextRole <= (hitler+fascism) && (fascism > 0)) {
-                fascism--
-                playerRoleTextView.text = "Fascism"
-                playerRoleTextView.setTextColor(requireContext().resources.getColor(R.color.red))
-            } else {
-                liberals--
-                playerRoleTextView.text = "Liberal"
-                playerRoleTextView.setTextColor(requireContext().resources.getColor(R.color.blue))
-            }
+            playerRoleTextView.text = gamePlayers[currentPlayerIndex].role.toString()
+            playerRoleTextView.setTextColor(requireContext().resources.getColor(gamePlayers[currentPlayerIndex].role.color))
         }
     }
 

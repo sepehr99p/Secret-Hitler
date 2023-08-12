@@ -1,12 +1,14 @@
 package com.example.secrethitler.data
 
+import com.example.secrethitler.R
+
 data class Player(
     val name : String,
     val role : ROLE
 )
 
-enum class ROLE{
-    FASCIEST,
-    LIBERAL,
-    HITLER
+enum class ROLE(val color : Int) {
+    FASCISM(R.color.red),
+    LIBERAL(R.color.blue),
+    HITLER(R.color.red)
 }
