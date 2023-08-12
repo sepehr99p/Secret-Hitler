@@ -36,6 +36,7 @@ class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMP
                 holder.binding.playerRoleTv.show()
                 isVisible = true
                 Handler().postDelayed(5000) {
+                    isVisible = false
                     notifyDataSetChanged()
                 }
             }
