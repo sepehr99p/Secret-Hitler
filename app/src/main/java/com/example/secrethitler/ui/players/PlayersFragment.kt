@@ -79,7 +79,7 @@ class PlayersFragment : Fragment() {
         initListeners()
         initObservers()
         binding.playBtn.setOnClickListener {
-            if (players.size >= 5) {
+            if ((players.size >= 5) && (players.size <= 12)) {
                 viewModel.updatePlayersList(players)
                 findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
             } else {
