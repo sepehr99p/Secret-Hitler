@@ -28,6 +28,7 @@ class GameFragment : Fragment() {
     private var communismCount = 0
     private var stalinCount = 0
     private val binding get() = _binding!!
+    private var presidentWatchCount = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +38,7 @@ class GameFragment : Fragment() {
     private fun initPlayersConfig() {
         when (players.size) {
             12 -> {
+                presidentWatchCount = 2
                 communismCount = 1
                 stalinCount = 1
                 fascismCount = 3
@@ -44,12 +46,14 @@ class GameFragment : Fragment() {
             }
 
             11 -> {
+                presidentWatchCount = 2
                 stalinCount = 1
                 fascismCount = 3
                 liberalsCount = players.size - hitlerCount - fascismCount
             }
 
             10, 9 -> {
+                presidentWatchCount = 2
                 fascismCount = 3
                 liberalsCount = players.size - hitlerCount - fascismCount
             }
@@ -60,6 +64,7 @@ class GameFragment : Fragment() {
             }
 
             6, 5 -> {
+                presidentWatchCount = 0
                 fascismCount = 1
                 liberalsCount = players.size - hitlerCount - fascismCount
             }
@@ -81,10 +86,18 @@ class GameFragment : Fragment() {
             playerRoleTextView.hide()
             playerNameTextView.text = players[currentPlayerIndex]
             playersRecyclerView.adapter = playerRoleAdapter
+            playerRoleAdapter.presidentRoleWatchListener = object : PresidentRoleWatchListener{
+                override fun onWatched() {
+
+                }
+
+            }
             playersRecyclerView.hide()
+            watchRoleBtn.hide()
         }
         initRoles()
     }
+
 
     private fun initRoles() {
         for (i in 0 until players.size) {
@@ -129,13 +142,31 @@ class GameFragment : Fragment() {
                     }
                 }
             }
+            watchRoleBtn.setOnClickListener {
+                presidentWatchCount--
+                presentList()
+            }
         }
+    }
+
+    private fun hideListPlayers() {
+        if (presidentWatchCount > 0) {
+            binding.watchRoleBtn.show()
+        }
+        binding.playersRecyclerView.hide()
+    }
+
+    private fun presentList() {
+        binding.watchRoleBtn.hide()
+        binding.playersRecyclerView.show()
     }
 
     private fun presentInGameScreen() {
         binding.playerRoleTextView.hide()
         binding.playerNameTextView.hide()
-        binding.playersRecyclerView.show()
+        if (presidentWatchCount > 0) {
+            binding.watchRoleBtn.show()
+        }
     }
 
     private fun showRole() {

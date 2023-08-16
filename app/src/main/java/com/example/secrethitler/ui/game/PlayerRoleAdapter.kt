@@ -12,6 +12,7 @@ import com.example.secrethitler.ui.utils.ViewHelper.show
 class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMPARATOR) {
 
     var isVisible = false
+    var presidentRoleWatchListener : PresidentRoleWatchListener? = null
 
     companion object {
         private val PLAYERS_COMPARATOR = object : DiffUtil.ItemCallback<Player>() {
@@ -47,6 +48,7 @@ class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMP
     private fun startTimer() {
         Handler().postDelayed(5000) {
             isVisible = false
+            presidentRoleWatchListener?.onWatched()
             notifyDataSetChanged()
         }
     }
