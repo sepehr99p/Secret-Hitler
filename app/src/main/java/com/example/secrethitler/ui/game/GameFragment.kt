@@ -88,7 +88,7 @@ class GameFragment : Fragment() {
             playersRecyclerView.adapter = playerRoleAdapter
             playerRoleAdapter.presidentRoleWatchListener = object : PresidentRoleWatchListener{
                 override fun onWatched() {
-
+                    hideListPlayers()
                 }
 
             }
