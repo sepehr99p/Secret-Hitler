@@ -1,17 +1,21 @@
 package com.example.secrethitler.ui.game
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.example.secrethitler.R
 import com.example.secrethitler.data.Player
 import com.example.secrethitler.data.ROLE
 import com.example.secrethitler.databinding.FragmentGameBinding
 import com.example.secrethitler.ui.MainActivity
 import com.example.secrethitler.ui.utils.ViewHelper.hide
 import com.example.secrethitler.ui.utils.ViewHelper.show
+import java.util.Stack
 import kotlin.random.Random
 
 class GameFragment : Fragment() {
@@ -21,6 +25,12 @@ class GameFragment : Fragment() {
     private var currentPlayerIndex = 0
     private val gamePlayers = arrayListOf<Player>()
     private val playerRoleAdapter by lazy { PlayerRoleAdapter() }
+    private val laws by lazy { Stack<LAW>() }
+    private val trashLaws = arrayListOf<LAW>()
+    enum class LAW(value : Int){
+        LIBERAL(0),
+        FASCISM(1)
+    }
 
     private var fascismCount = 0
     private var liberalsCount = 0
@@ -96,6 +106,20 @@ class GameFragment : Fragment() {
             watchLawBtn.hide()
         }
         initRoles()
+        initLaws()
+    }
+
+    private fun initLaws() {
+        repeat(6){
+            trashLaws.add(LAW.LIBERAL)
+        }
+        repeat(11){
+            trashLaws.add(LAW.FASCISM)
+        }
+        trashLaws.shuffle()
+        laws.addAll(trashLaws)
+        trashLaws.clear()
+        Log.i("SEPI", "initLaws: $laws")
     }
 
 
@@ -147,10 +171,42 @@ class GameFragment : Fragment() {
                 presentList()
             }
             watchLawBtn.setOnClickListener{
-                lawMainLl.show()
+                showLaw()
+            }
+            law1Tv.setOnClickListener {
+                law1Tv.hide()
+                trashLaws.add(getLawValue(law1Tv.background))
+                checkFinishedCabine()
+            }
+            law2Tv.setOnClickListener {
+                law2Tv.hide()
+                trashLaws.add(getLawValue(law2Tv.background))
+                checkFinishedCabine()
+            }
+            law3Tv.setOnClickListener {
+                law3Tv.hide()
+                trashLaws.add(getLawValue(law3Tv.background))
+                checkFinishedCabine()
             }
         }
     }
+
+    private fun checkFinishedCabine() {
+        var count = 0
+        if (binding.law1Tv.isVisible) {
+            count++
+        }
+        if (binding.law1Tv.isVisible) {
+            count++
+        }
+        if (binding.law1Tv.isVisible) {
+            count++
+        }
+        if (count==0) {
+            binding.lawMainLl.hide()
+        }
+    }
+
 
     private fun hideListPlayers() {
         if (presidentWatchCount > 0) {
@@ -190,9 +246,36 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun showCard() {
-
+    private fun showLaw() {
+        with(binding) {
+            law1Tv.background = getLawCard(laws.pop())
+            law2Tv.background = getLawCard(laws.pop())
+            law3Tv.background = getLawCard(laws.pop())
+            lawMainLl.show()
+            law1Tv.show()
+            law2Tv.show()
+            law3Tv.show()
+        }
     }
+
+    private fun getLawCard(law: LAW) : Drawable {
+        return if (law == LAW.LIBERAL) {
+            this.resources.getDrawable(R.drawable.bg_rectangle_blue)
+        } else {
+            this.resources.getDrawable(R.drawable.bg_rectangle_red)
+        }
+    }
+
+    private fun getLawValue(background: Drawable): LAW {
+        return if (background == this.resources.getDrawable(R.drawable.bg_rectangle_blue)) {
+            Log.i("SEPI", "getLawValue: liberal")
+            LAW.LIBERAL
+        } else {
+            Log.i("SEPI", "getLawValue: fascism")
+            LAW.FASCISM
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
