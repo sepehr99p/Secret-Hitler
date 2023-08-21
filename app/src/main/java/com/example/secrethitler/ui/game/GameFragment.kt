@@ -90,10 +90,10 @@ class GameFragment : Fragment() {
                 override fun onWatched() {
                     hideListPlayers()
                 }
-
             }
             playersRecyclerView.hide()
             watchRoleBtn.hide()
+            watchLawBtn.hide()
         }
         initRoles()
     }
@@ -146,18 +146,23 @@ class GameFragment : Fragment() {
                 presidentWatchCount--
                 presentList()
             }
+            watchLawBtn.setOnClickListener{
+                lawMainLl.show()
+            }
         }
     }
 
     private fun hideListPlayers() {
         if (presidentWatchCount > 0) {
             binding.watchRoleBtn.show()
+            binding.lawMainLl.show()
         }
         binding.playersRecyclerView.hide()
     }
 
     private fun presentList() {
         binding.watchRoleBtn.hide()
+        binding.lawMainLl.hide()
         binding.playersRecyclerView.show()
     }
 
@@ -167,6 +172,7 @@ class GameFragment : Fragment() {
         if (presidentWatchCount > 0) {
             binding.watchRoleBtn.show()
         }
+        binding.watchLawBtn.show()
     }
 
     private fun showRole() {
@@ -182,6 +188,10 @@ class GameFragment : Fragment() {
             playerRoleTextView.hide()
             playerNameTextView.text = players[currentPlayerIndex]
         }
+    }
+
+    private fun showCard() {
+
     }
 
     override fun onDestroyView() {
