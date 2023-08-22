@@ -1,11 +1,11 @@
 package com.example.secrethitler.ui.game
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.secrethitler.R
@@ -14,6 +14,7 @@ import com.example.secrethitler.data.ROLE
 import com.example.secrethitler.databinding.FragmentGameBinding
 import com.example.secrethitler.ui.MainActivity
 import com.example.secrethitler.ui.utils.ViewHelper.hide
+import com.example.secrethitler.ui.utils.ViewHelper.invisible
 import com.example.secrethitler.ui.utils.ViewHelper.show
 import java.util.Stack
 import kotlin.random.Random
@@ -174,18 +175,18 @@ class GameFragment : Fragment() {
                 showLaw()
             }
             law1Tv.setOnClickListener {
-                law1Tv.hide()
-                trashLaws.add(getLawValue(law1Tv.background))
+                law1Tv.invisible()
+                trashLaws.add(getLawValue(law1Tv))
                 checkFinishedCabine()
             }
             law2Tv.setOnClickListener {
-                law2Tv.hide()
-                trashLaws.add(getLawValue(law2Tv.background))
+                law2Tv.invisible()
+                trashLaws.add(getLawValue(law2Tv))
                 checkFinishedCabine()
             }
             law3Tv.setOnClickListener {
-                law3Tv.hide()
-                trashLaws.add(getLawValue(law3Tv.background))
+                law3Tv.invisible()
+                trashLaws.add(getLawValue(law3Tv))
                 checkFinishedCabine()
             }
         }
@@ -196,13 +197,14 @@ class GameFragment : Fragment() {
         if (binding.law1Tv.isVisible) {
             count++
         }
-        if (binding.law1Tv.isVisible) {
+        if (binding.law2Tv.isVisible) {
             count++
         }
-        if (binding.law1Tv.isVisible) {
+        if (binding.law3Tv.isVisible) {
             count++
         }
         if (count==0) {
+            Log.i("SEPI", "checkFinishedCabine: count = 0")
             binding.lawMainLl.hide()
         }
     }
@@ -248,9 +250,9 @@ class GameFragment : Fragment() {
 
     private fun showLaw() {
         with(binding) {
-            law1Tv.background = getLawCard(laws.pop())
-            law2Tv.background = getLawCard(laws.pop())
-            law3Tv.background = getLawCard(laws.pop())
+            setLawCard(law1Tv)
+            setLawCard(law2Tv)
+            setLawCard(law3Tv)
             lawMainLl.show()
             law1Tv.show()
             law2Tv.show()
@@ -258,20 +260,30 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun getLawCard(law: LAW) : Drawable {
-        return if (law == LAW.LIBERAL) {
-            this.resources.getDrawable(R.drawable.bg_rectangle_blue)
+    private fun setLawCard(lawTv: TextView) {
+        if (getLaw() == LAW.LIBERAL) {
+            lawTv.background = this.resources.getDrawable(R.drawable.bg_rectangle_blue)
+            lawTv.text = "Liberal"
         } else {
-            this.resources.getDrawable(R.drawable.bg_rectangle_red)
+            lawTv.background = this.resources.getDrawable(R.drawable.bg_rectangle_red)
+            lawTv.text = "fascism"
         }
     }
 
-    private fun getLawValue(background: Drawable): LAW {
-        return if (background == this.resources.getDrawable(R.drawable.bg_rectangle_blue)) {
-            Log.i("SEPI", "getLawValue: liberal")
+    private fun getLaw(): LAW {
+        if (laws.empty()) {
+            trashLaws.shuffle()
+            laws.addAll(trashLaws)
+            Log.i("SEPI", "getLaw: shuffled new $laws ")
+            trashLaws.clear()
+        }
+        return laws.pop()
+    }
+
+    private fun getLawValue(textView: TextView): LAW {
+        return if (textView.text.toString() == "Liberal") {
             LAW.LIBERAL
         } else {
-            Log.i("SEPI", "getLawValue: fascism")
             LAW.FASCISM
         }
     }
