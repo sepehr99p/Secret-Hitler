@@ -28,6 +28,8 @@ class GameFragment : Fragment() {
     private val playerRoleAdapter by lazy { PlayerRoleAdapter() }
     private val laws by lazy { Stack<LAW>() }
     private val trashLaws = arrayListOf<LAW>()
+    private val liberalSubmitedLaw = arrayListOf<LAW>()
+    private val fascismSubmitedLaw = arrayListOf<LAW>()
     enum class LAW(value : Int){
         LIBERAL(0),
         FASCISM(1)
@@ -203,9 +205,20 @@ class GameFragment : Fragment() {
         if (binding.law3Tv.isVisible) {
             count++
         }
-        if (count==0) {
+        if (count == 1) {
+            submitLaw(trashLaws.removeLast())
+        }
+        if (count == 0) {
             Log.i("SEPI", "checkFinishedCabine: count = 0")
             binding.lawMainLl.hide()
+        }
+    }
+
+    private fun submitLaw(last: LAW) {
+        if (last.name == LAW.LIBERAL.name) {
+            liberalSubmitedLaw.add(last)
+        } else {
+            fascismSubmitedLaw.add(last)
         }
     }
 
