@@ -206,7 +206,7 @@ class GameFragment : Fragment() {
             count++
         }
         if (count == 1) {
-            submitLaw(trashLaws.removeLast())
+            submitLaw(laws.removeLast())
         }
         if (count == 0) {
             Log.i("SEPI", "checkFinishedCabine: count = 0")
@@ -287,7 +287,9 @@ class GameFragment : Fragment() {
         if (laws.empty()) {
             trashLaws.shuffle()
             laws.addAll(trashLaws)
-            Log.i("SEPI", "getLaw: shuffled new $laws ")
+            Log.i("SEPI", "getLaw: shuffled new ${laws.size} ")
+            Log.i("SEPI", "getLaw: submitted liberal ${liberalSubmitedLaw.size}")
+            Log.i("SEPI", "getLaw: submitted fascism ${fascismSubmitedLaw.size}")
             trashLaws.clear()
         }
         return laws.pop()
