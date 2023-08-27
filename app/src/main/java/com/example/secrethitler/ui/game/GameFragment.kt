@@ -9,11 +9,16 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.secrethitler.R
 import com.example.secrethitler.data.Player
+import com.example.secrethitler.data.PlayersPreferencesRepository
 import com.example.secrethitler.data.ROLE
 import com.example.secrethitler.databinding.FragmentGameBinding
 import com.example.secrethitler.ui.MainActivity
+import com.example.secrethitler.ui.players.PlayersViewModel
+import com.example.secrethitler.ui.players.PlayersViewModelFactory
+import com.example.secrethitler.ui.playersPreferencesStore
 import com.example.secrethitler.ui.utils.ViewHelper.hide
 import com.example.secrethitler.ui.utils.ViewHelper.invisible
 import com.example.secrethitler.ui.utils.ViewHelper.show
@@ -22,9 +27,17 @@ import kotlin.random.Random
 class GameFragment : Fragment() {
 
     private var _binding: FragmentGameBinding? = null
-    private val players by lazy { (activity as MainActivity).players }
+    private val players = arrayListOf<String>()
     private val playerRoleAdapter by lazy { PlayerRoleAdapter() }
-    private val viewModel by viewModels<GameViewModel>()
+    private val viewModel: GameViewModel by lazy {
+        ViewModelProvider(
+            this,
+            GameViewModelFactory(
+                PlayersPreferencesRepository(requireContext().playersPreferencesStore)
+            )
+        ).get(GameViewModel::class.java)
+    }
+
 
     enum class LAW(value : Int){
         LIBERAL(0),
@@ -36,10 +49,50 @@ class GameFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initPlayersConfig()
     }
 
-    fun initRoles() {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentGameBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initObservers()
+        initListeners()
+    }
+
+    private fun initObservers() {
+        viewModel.initialSetupEvent.observe(viewLifecycleOwner) {
+            players.clear()
+            players.addAll(it.namesList)
+            initPlayersConfig()
+            initRoles()
+            viewModel.initLaws()
+            initView()
+        }
+    }
+
+    private fun initView() {
+        with(binding) {
+            playerRoleTextView.hide()
+            playerNameTextView.text = players[viewModel.currentPlayerIndex]
+            playersRecyclerView.adapter = playerRoleAdapter
+            playerRoleAdapter.presidentRoleWatchListener = object : PresidentRoleWatchListener{
+                override fun onWatched() {
+                    hideListPlayers()
+                }
+            }
+            playersRecyclerView.hide()
+            watchRoleBtn.hide()
+            watchLawBtn.hide()
+        }
+    }
+
+    private fun initRoles() {
         with(viewModel){
             for (i in 0 until players.size) {
                 val random = Random(System.currentTimeMillis())
@@ -105,33 +158,7 @@ class GameFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentGameBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initListeners()
-        with(binding) {
-            playerRoleTextView.hide()
-            playerNameTextView.text = players[viewModel.currentPlayerIndex]
-            playersRecyclerView.adapter = playerRoleAdapter
-            playerRoleAdapter.presidentRoleWatchListener = object : PresidentRoleWatchListener{
-                override fun onWatched() {
-                    hideListPlayers()
-                }
-            }
-            playersRecyclerView.hide()
-            watchRoleBtn.hide()
-            watchLawBtn.hide()
-        }
-        initRoles()
-        viewModel.initLaws()
-    }
 
 
 

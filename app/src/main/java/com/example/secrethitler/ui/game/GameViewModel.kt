@@ -3,10 +3,16 @@ package com.example.secrethitler.ui.game
 import android.util.Log
 import android.widget.TextView
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.liveData
 import com.example.secrethitler.data.Player
+import com.example.secrethitler.data.PlayersPreferencesRepository
+import com.example.secrethitler.ui.players.PlayersViewModel
 import java.util.Stack
 
-class GameViewModel : ViewModel() {
+class GameViewModel(
+    private val playersPreferencesRepository: PlayersPreferencesRepository
+) : ViewModel() {
 
     var fascismCount = 0
     var liberalsCount = 0
@@ -21,6 +27,9 @@ class GameViewModel : ViewModel() {
     var currentPlayerIndex = 0
     val gamePlayers = arrayListOf<Player>()
 
+    val initialSetupEvent = liveData {
+        emit(playersPreferencesRepository.fetchInitialPreferences())
+    }
 
     fun initLaws() {
         repeat(6) {
@@ -73,4 +82,17 @@ class GameViewModel : ViewModel() {
     fun getPlayerRoleColor(): Int = gamePlayers[currentPlayerIndex].role.color
 
 
+}
+
+class GameViewModelFactory(
+    private val playersPreferencesRepository: PlayersPreferencesRepository
+) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(GameViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return GameViewModel(playersPreferencesRepository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 }

@@ -34,7 +34,7 @@ class PlayersFragment : Fragment() {
     private var _binding: FragmentPlayersBinding? = null
     private val binding get() = _binding!!
     private val adapter by lazy { PlayersAdapter() }
-    private val players by lazy { (activity as MainActivity).players }
+    private val players = arrayListOf<String>()
     private val viewModel: PlayersViewModel by lazy {
         ViewModelProvider(
             this,
