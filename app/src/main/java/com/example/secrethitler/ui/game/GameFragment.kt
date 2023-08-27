@@ -8,16 +8,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.secrethitler.R
 import com.example.secrethitler.data.Player
 import com.example.secrethitler.data.PlayersPreferencesRepository
 import com.example.secrethitler.data.ROLE
 import com.example.secrethitler.databinding.FragmentGameBinding
-import com.example.secrethitler.ui.MainActivity
-import com.example.secrethitler.ui.players.PlayersViewModel
-import com.example.secrethitler.ui.players.PlayersViewModelFactory
 import com.example.secrethitler.ui.playersPreferencesStore
 import com.example.secrethitler.ui.utils.ViewHelper.hide
 import com.example.secrethitler.ui.utils.ViewHelper.invisible
@@ -39,7 +35,7 @@ class GameFragment : Fragment() {
     }
 
 
-    enum class LAW(value : Int){
+    enum class LAW(value: Int) {
         LIBERAL(0),
         FASCISM(1)
     }
@@ -81,7 +77,7 @@ class GameFragment : Fragment() {
             playerRoleTextView.hide()
             playerNameTextView.text = players[viewModel.currentPlayerIndex]
             playersRecyclerView.adapter = playerRoleAdapter
-            playerRoleAdapter.presidentRoleWatchListener = object : PresidentRoleWatchListener{
+            playerRoleAdapter.presidentRoleWatchListener = object : PresidentRoleWatchListener {
                 override fun onWatched() {
                     hideListPlayers()
                 }
@@ -93,7 +89,7 @@ class GameFragment : Fragment() {
     }
 
     private fun initRoles() {
-        with(viewModel){
+        with(viewModel) {
             for (i in 0 until players.size) {
                 val random = Random(System.currentTimeMillis())
                 val nextRole =
@@ -158,11 +154,6 @@ class GameFragment : Fragment() {
         }
     }
 
-
-
-
-
-
     private fun initListeners() {
         with(binding) {
             root.setOnClickListener {
@@ -185,31 +176,24 @@ class GameFragment : Fragment() {
                 presidentWatchCount--
                 presentList()
             }
-            watchLawBtn.setOnClickListener{
+            watchLawBtn.setOnClickListener {
                 showLaw()
             }
             law1Tv.setOnClickListener {
-                law1Tv.invisible()
-                viewModel.trashTheLaw(law1Tv)
-
-                checkFinishedCabine()
+                checkFinishedCabine(law1Tv)
             }
             law2Tv.setOnClickListener {
-                law2Tv.invisible()
-                viewModel.trashTheLaw(law2Tv)
-                checkFinishedCabine()
+                checkFinishedCabine(law2Tv)
             }
             law3Tv.setOnClickListener {
-                law3Tv.invisible()
-                viewModel.trashTheLaw(law3Tv)
-                checkFinishedCabine()
+                checkFinishedCabine(law3Tv)
             }
         }
     }
 
-    private fun checkFinishedCabine() {
+    private fun checkFinishedCabine(lawTv: TextView) {
         var count = 0
-        lateinit var law : LAW
+        lateinit var law: LAW
         if (binding.law1Tv.isVisible) {
             count++
             law = viewModel.getLawValue(binding.law1Tv)
@@ -224,13 +208,15 @@ class GameFragment : Fragment() {
         }
         if (count == 1) {
             viewModel.submitLaw(law)
+        } else if (count > 1) {
+            viewModel.trashTheLaw(lawTv)
         }
         if (count == 0) {
             Log.i("SEPI", "checkFinishedCabine: count = 0")
             binding.lawMainLl.hide()
         }
+        lawTv.invisible()
     }
-
 
 
     private fun hideListPlayers() {
@@ -292,8 +278,6 @@ class GameFragment : Fragment() {
             lawTv.text = "fascism"
         }
     }
-
-
 
 
     override fun onDestroyView() {

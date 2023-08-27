@@ -39,6 +39,7 @@ class GameViewModel(
             trashLaws.add(GameFragment.LAW.FASCISM)
         }
         trashLaws.shuffle()
+        laws.clear()
         laws.addAll(trashLaws)
         trashLaws.clear()
         Log.i("SEPI", "initLaws: $laws")
@@ -75,6 +76,10 @@ class GameViewModel(
     }
 
     fun trashTheLaw(textView: TextView) {
+        Log.i("SEPI", "trashTheLaw: ${textView.text.toString()}")
+        Log.i("SEPI", "law: ${laws.size}")
+        Log.i("SEPI", "submit liberal: ${liberalSubmittedLaw.size}")
+        Log.i("SEPI", "submit fascism: ${fascismSubmittedLaw.size}")
         trashLaws.add(getLawValue(textView))
     }
 
