@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.secrethitler.R
 import com.example.secrethitler.data.Player
 import com.example.secrethitler.data.ROLE
@@ -16,30 +17,20 @@ import com.example.secrethitler.ui.MainActivity
 import com.example.secrethitler.ui.utils.ViewHelper.hide
 import com.example.secrethitler.ui.utils.ViewHelper.invisible
 import com.example.secrethitler.ui.utils.ViewHelper.show
-import java.util.Stack
 import kotlin.random.Random
 
 class GameFragment : Fragment() {
 
     private var _binding: FragmentGameBinding? = null
     private val players by lazy { (activity as MainActivity).players }
-    private var currentPlayerIndex = 0
-    private val gamePlayers = arrayListOf<Player>()
     private val playerRoleAdapter by lazy { PlayerRoleAdapter() }
-    private val laws by lazy { Stack<LAW>() }
-    private val trashLaws = arrayListOf<LAW>()
-    private val liberalSubmitedLaw = arrayListOf<LAW>()
-    private val fascismSubmitedLaw = arrayListOf<LAW>()
+    private val viewModel by viewModels<GameViewModel>()
+
     enum class LAW(value : Int){
         LIBERAL(0),
         FASCISM(1)
     }
 
-    private var fascismCount = 0
-    private var liberalsCount = 0
-    private var hitlerCount = 1
-    private var communismCount = 0
-    private var stalinCount = 0
     private val binding get() = _binding!!
     private var presidentWatchCount = 1
 
@@ -48,38 +39,68 @@ class GameFragment : Fragment() {
         initPlayersConfig()
     }
 
+    fun initRoles() {
+        with(viewModel){
+            for (i in 0 until players.size) {
+                val random = Random(System.currentTimeMillis())
+                val nextRole =
+                    random.nextInt(hitlerCount + liberalsCount + fascismCount + stalinCount + communismCount)
+                if (nextRole == hitlerCount && (hitlerCount > 0)) {
+                    hitlerCount = 0
+                    gamePlayers.add(Player(players[i], ROLE.HITLER))
+                } else if (nextRole <= (hitlerCount + fascismCount) && (fascismCount > 0)) {
+                    fascismCount--
+                    gamePlayers.add(Player(players[i], ROLE.FASCISM))
+                } else if (nextRole <= (hitlerCount + fascismCount + communismCount) && (communismCount > 0)) {
+                    communismCount--
+                    gamePlayers.add(Player(players[i], ROLE.COMMUNISM))
+                } else if (nextRole <= ((hitlerCount + fascismCount + communismCount) + stalinCount) && (stalinCount > 0)) {
+                    stalinCount--
+                    gamePlayers.add(Player(players[i], ROLE.STALIN))
+                } else {
+                    liberalsCount--
+                    gamePlayers.add(Player(players[i], ROLE.LIBERAL))
+                }
+            }
+            playerRoleAdapter.submitList(gamePlayers)
+        }
+    }
+
+
     private fun initPlayersConfig() {
-        when (players.size) {
-            12 -> {
-                presidentWatchCount = 2
-                communismCount = 1
-                stalinCount = 1
-                fascismCount = 3
-                liberalsCount = players.size - hitlerCount - fascismCount
-            }
+        with(viewModel) {
+            when (players.size) {
+                12 -> {
+                    presidentWatchCount = 2
+                    communismCount = 1
+                    stalinCount = 1
+                    fascismCount = 3
+                    liberalsCount = players.size - hitlerCount - fascismCount
+                }
 
-            11 -> {
-                presidentWatchCount = 2
-                stalinCount = 1
-                fascismCount = 3
-                liberalsCount = players.size - hitlerCount - fascismCount
-            }
+                11 -> {
+                    presidentWatchCount = 2
+                    stalinCount = 1
+                    fascismCount = 3
+                    liberalsCount = players.size - hitlerCount - fascismCount
+                }
 
-            10, 9 -> {
-                presidentWatchCount = 2
-                fascismCount = 3
-                liberalsCount = players.size - hitlerCount - fascismCount
-            }
+                10, 9 -> {
+                    presidentWatchCount = 2
+                    fascismCount = 3
+                    liberalsCount = players.size - hitlerCount - fascismCount
+                }
 
-            8, 7 -> {
-                fascismCount = 2
-                liberalsCount = players.size - hitlerCount - fascismCount
-            }
+                8, 7 -> {
+                    fascismCount = 2
+                    liberalsCount = players.size - hitlerCount - fascismCount
+                }
 
-            6, 5 -> {
-                presidentWatchCount = 0
-                fascismCount = 1
-                liberalsCount = players.size - hitlerCount - fascismCount
+                6, 5 -> {
+                    presidentWatchCount = 0
+                    fascismCount = 1
+                    liberalsCount = players.size - hitlerCount - fascismCount
+                }
             }
         }
     }
@@ -97,7 +118,7 @@ class GameFragment : Fragment() {
         initListeners()
         with(binding) {
             playerRoleTextView.hide()
-            playerNameTextView.text = players[currentPlayerIndex]
+            playerNameTextView.text = players[viewModel.currentPlayerIndex]
             playersRecyclerView.adapter = playerRoleAdapter
             playerRoleAdapter.presidentRoleWatchListener = object : PresidentRoleWatchListener{
                 override fun onWatched() {
@@ -109,57 +130,21 @@ class GameFragment : Fragment() {
             watchLawBtn.hide()
         }
         initRoles()
-        initLaws()
-    }
-
-    private fun initLaws() {
-        repeat(6){
-            trashLaws.add(LAW.LIBERAL)
-        }
-        repeat(11){
-            trashLaws.add(LAW.FASCISM)
-        }
-        trashLaws.shuffle()
-        laws.addAll(trashLaws)
-        trashLaws.clear()
-        Log.i("SEPI", "initLaws: $laws")
+        viewModel.initLaws()
     }
 
 
-    private fun initRoles() {
-        for (i in 0 until players.size) {
-            val random = Random(System.currentTimeMillis())
-            val nextRole =
-                random.nextInt(hitlerCount + liberalsCount + fascismCount + stalinCount + communismCount)
-            if (nextRole == hitlerCount && (hitlerCount > 0)) {
-                hitlerCount = 0
-                gamePlayers.add(Player(players[i], ROLE.HITLER))
-            } else if (nextRole <= (hitlerCount + fascismCount) && (fascismCount > 0)) {
-                fascismCount--
-                gamePlayers.add(Player(players[i], ROLE.FASCISM))
-            } else if (nextRole <= (hitlerCount + fascismCount + communismCount) && (communismCount > 0)) {
-                communismCount--
-                gamePlayers.add(Player(players[i], ROLE.COMMUNISM))
-            } else if (nextRole <= ((hitlerCount + fascismCount + communismCount) + stalinCount) && (stalinCount > 0)) {
-                stalinCount--
-                gamePlayers.add(Player(players[i], ROLE.STALIN))
-            } else {
-                liberalsCount--
-                gamePlayers.add(Player(players[i], ROLE.LIBERAL))
-            }
-        }
-        playerRoleAdapter.submitList(gamePlayers)
-    }
+
 
     private fun initListeners() {
         with(binding) {
             root.setOnClickListener {
-                if (currentPlayerIndex == players.size) {
+                if (viewModel.currentPlayerIndex == players.size) {
                     presentInGameScreen()
                 } else {
                     if (playerRoleTextView.isVisible) {
-                        currentPlayerIndex++
-                        if (currentPlayerIndex == players.size) {
+                        viewModel.currentPlayerIndex++
+                        if (viewModel.currentPlayerIndex == players.size) {
                             presentInGameScreen()
                         } else {
                             showNextPlayer()
@@ -178,17 +163,18 @@ class GameFragment : Fragment() {
             }
             law1Tv.setOnClickListener {
                 law1Tv.invisible()
-                trashLaws.add(getLawValue(law1Tv))
+                viewModel.trashTheLaw(law1Tv)
+
                 checkFinishedCabine()
             }
             law2Tv.setOnClickListener {
                 law2Tv.invisible()
-                trashLaws.add(getLawValue(law2Tv))
+                viewModel.trashTheLaw(law2Tv)
                 checkFinishedCabine()
             }
             law3Tv.setOnClickListener {
                 law3Tv.invisible()
-                trashLaws.add(getLawValue(law3Tv))
+                viewModel.trashTheLaw(law3Tv)
                 checkFinishedCabine()
             }
         }
@@ -196,17 +182,21 @@ class GameFragment : Fragment() {
 
     private fun checkFinishedCabine() {
         var count = 0
+        lateinit var law : LAW
         if (binding.law1Tv.isVisible) {
             count++
+            law = viewModel.getLawValue(binding.law1Tv)
         }
         if (binding.law2Tv.isVisible) {
             count++
+            law = viewModel.getLawValue(binding.law2Tv)
         }
         if (binding.law3Tv.isVisible) {
             count++
+            law = viewModel.getLawValue(binding.law3Tv)
         }
         if (count == 1) {
-            submitLaw(laws.removeLast())
+            viewModel.submitLaw(law)
         }
         if (count == 0) {
             Log.i("SEPI", "checkFinishedCabine: count = 0")
@@ -214,13 +204,6 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun submitLaw(last: LAW) {
-        if (last.name == LAW.LIBERAL.name) {
-            liberalSubmitedLaw.add(last)
-        } else {
-            fascismSubmitedLaw.add(last)
-        }
-    }
 
 
     private fun hideListPlayers() {
@@ -249,15 +232,15 @@ class GameFragment : Fragment() {
     private fun showRole() {
         with(binding) {
             playerRoleTextView.show()
-            playerRoleTextView.text = gamePlayers[currentPlayerIndex].role.toString()
-            playerRoleTextView.setTextColor(requireContext().resources.getColor(gamePlayers[currentPlayerIndex].role.color))
+            playerRoleTextView.text = viewModel.getPlayerRoleText()
+            playerRoleTextView.setTextColor(requireContext().resources.getColor(viewModel.getPlayerRoleColor()))
         }
     }
 
     private fun showNextPlayer() {
         with(binding) {
             playerRoleTextView.hide()
-            playerNameTextView.text = players[currentPlayerIndex]
+            playerNameTextView.text = players[viewModel.currentPlayerIndex]
         }
     }
 
@@ -274,7 +257,7 @@ class GameFragment : Fragment() {
     }
 
     private fun setLawCard(lawTv: TextView) {
-        if (getLaw() == LAW.LIBERAL) {
+        if (viewModel.getLaw() == LAW.LIBERAL) {
             lawTv.background = this.resources.getDrawable(R.drawable.bg_rectangle_blue)
             lawTv.text = "Liberal"
         } else {
@@ -283,25 +266,7 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun getLaw(): LAW {
-        if (laws.empty()) {
-            trashLaws.shuffle()
-            laws.addAll(trashLaws)
-            Log.i("SEPI", "getLaw: shuffled new ${laws.size} ")
-            Log.i("SEPI", "getLaw: submitted liberal ${liberalSubmitedLaw.size}")
-            Log.i("SEPI", "getLaw: submitted fascism ${fascismSubmitedLaw.size}")
-            trashLaws.clear()
-        }
-        return laws.pop()
-    }
 
-    private fun getLawValue(textView: TextView): LAW {
-        return if (textView.text.toString() == "Liberal") {
-            LAW.LIBERAL
-        } else {
-            LAW.FASCISM
-        }
-    }
 
 
     override fun onDestroyView() {
