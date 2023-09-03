@@ -20,20 +20,14 @@ import com.example.secrethitler.ui.utils.ViewHelper.invisible
 import com.example.secrethitler.ui.utils.ViewHelper.show
 import kotlin.random.Random
 
-class GameFragment : Fragment() {
+class GameFragment constructor(
+    private val viewModel: GameViewModel
+) : Fragment() {
 
     private var _binding: FragmentGameBinding? = null
     private val players = mutableListOf<String>()
     private val rolesInitList = mutableListOf<ROLE>()
     private val playerRoleAdapter by lazy { PlayerRoleAdapter() }
-    private val viewModel: GameViewModel by lazy {
-        ViewModelProvider(
-            this,
-            GameViewModelFactory(
-                PlayersPreferencesRepository(requireContext().playersPreferencesStore)
-            )
-        ).get(GameViewModel::class.java)
-    }
 
 
     enum class LAW {

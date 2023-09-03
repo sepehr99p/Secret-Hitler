@@ -8,8 +8,11 @@ import androidx.fragment.app.Fragment
 import com.example.secrethitler.databinding.FragmentBoardBinding
 import com.example.secrethitler.databinding.FragmentGameBinding
 import com.example.secrethitler.databinding.FragmentMainTabBinding
+import com.example.secrethitler.ui.game.GameViewModel
 
-class BoardFragment : Fragment() {
+class BoardFragment constructor(
+    private val viewModel: GameViewModel
+) : Fragment() {
 
 
     private var _binding: FragmentBoardBinding? = null
