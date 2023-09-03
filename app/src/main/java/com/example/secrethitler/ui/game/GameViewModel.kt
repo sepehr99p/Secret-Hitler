@@ -9,6 +9,7 @@ import com.example.secrethitler.data.Player
 import com.example.secrethitler.data.PlayersPreferencesRepository
 import com.example.secrethitler.ui.players.PlayersViewModel
 import java.util.Stack
+import kotlin.random.Random
 
 class GameViewModel(
     private val playersPreferencesRepository: PlayersPreferencesRepository
@@ -38,7 +39,7 @@ class GameViewModel(
         repeat(11) {
             trashLaws.add(GameFragment.LAW.FASCISM)
         }
-        trashLaws.shuffle()
+        trashLaws.shuffle(Random(System.currentTimeMillis()))
         laws.clear()
         laws.addAll(trashLaws)
         trashLaws.clear()
@@ -57,7 +58,7 @@ class GameViewModel(
 
     fun getLaw(): GameFragment.LAW {
         if (laws.empty()) {
-            trashLaws.shuffle()
+            trashLaws.shuffle(Random(System.currentTimeMillis()))
             laws.addAll(trashLaws)
             Log.i("SEPI", "getLaw: shuffled new ${laws.size} ")
             Log.i("SEPI", "getLaw: submitted liberal ${liberalSubmittedLaw.size}")

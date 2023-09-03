@@ -23,7 +23,8 @@ import kotlin.random.Random
 class GameFragment : Fragment() {
 
     private var _binding: FragmentGameBinding? = null
-    private val players = arrayListOf<String>()
+    private val players = mutableListOf<String>()
+    private val rolesInitList = mutableListOf<ROLE>()
     private val playerRoleAdapter by lazy { PlayerRoleAdapter() }
     private val viewModel: GameViewModel by lazy {
         ViewModelProvider(
@@ -35,9 +36,9 @@ class GameFragment : Fragment() {
     }
 
 
-    enum class LAW(value: Int) {
-        LIBERAL(0),
-        FASCISM(1)
+    enum class LAW {
+        LIBERAL,
+        FASCISM
     }
 
     private val binding get() = _binding!!
@@ -66,7 +67,6 @@ class GameFragment : Fragment() {
             players.clear()
             players.addAll(it.namesList)
             initPlayersConfig()
-            initRoles()
             viewModel.initLaws()
             initView()
         }
@@ -75,7 +75,7 @@ class GameFragment : Fragment() {
     private fun initView() {
         with(binding) {
             playerRoleTextView.hide()
-            playerNameTextView.text = players[viewModel.currentPlayerIndex]
+            playerNameTextView.text = viewModel.gamePlayers[viewModel.currentPlayerIndex].name
             playersRecyclerView.adapter = playerRoleAdapter
             playerRoleAdapter.presidentRoleWatchListener = object : PresidentRoleWatchListener {
                 override fun onWatched() {
@@ -88,33 +88,29 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun initRoles() {
-        with(viewModel) {
-            for (i in 0 until players.size) {
-                val random = Random(System.currentTimeMillis())
-                val nextRole =
-                    random.nextInt(hitlerCount + liberalsCount + fascismCount + stalinCount + communismCount)
-                if (nextRole == hitlerCount && (hitlerCount > 0)) {
-                    hitlerCount = 0
-                    gamePlayers.add(Player(players[i], ROLE.HITLER))
-                } else if (nextRole <= (hitlerCount + fascismCount) && (fascismCount > 0)) {
-                    fascismCount--
-                    gamePlayers.add(Player(players[i], ROLE.FASCISM))
-                } else if (nextRole <= (hitlerCount + fascismCount + communismCount) && (communismCount > 0)) {
-                    communismCount--
-                    gamePlayers.add(Player(players[i], ROLE.COMMUNISM))
-                } else if (nextRole <= ((hitlerCount + fascismCount + communismCount) + stalinCount) && (stalinCount > 0)) {
-                    stalinCount--
-                    gamePlayers.add(Player(players[i], ROLE.STALIN))
-                } else {
-                    liberalsCount--
-                    gamePlayers.add(Player(players[i], ROLE.LIBERAL))
-                }
-            }
-            playerRoleAdapter.submitList(gamePlayers)
+    private fun initRoles(communismCount : Int, stalinCount : Int, fascismCount : Int, liberalCount : Int) {
+        createRole(communismCount,ROLE.COMMUNISM)
+        createRole(stalinCount,ROLE.STALIN)
+        createRole(fascismCount,ROLE.FASCISM)
+        createRole(liberalCount,ROLE.LIBERAL)
+        createRole(1,ROLE.HITLER)
+        rolesInitList.shuffle(Random(System.currentTimeMillis()))
+        players.shuffle(Random(System.currentTimeMillis()/3))
+        initFinalPlayerList()
+        playerRoleAdapter.submitList(viewModel.gamePlayers)
+    }
+
+    private fun initFinalPlayerList() {
+        for (i in 0 until  players.size) {
+            viewModel.gamePlayers.add(Player(players.removeLast(),rolesInitList.removeLast()))
         }
     }
 
+    private fun createRole(count : Int, role : ROLE) {
+        for (i in 0 until count) {
+            rolesInitList.add(role)
+        }
+    }
 
     private fun initPlayersConfig() {
         with(viewModel) {
@@ -125,6 +121,7 @@ class GameFragment : Fragment() {
                     stalinCount = 1
                     fascismCount = 3
                     liberalsCount = players.size - hitlerCount - fascismCount
+                    initRoles(communismCount,stalinCount,fascismCount,liberalsCount)
                 }
 
                 11 -> {
@@ -141,6 +138,7 @@ class GameFragment : Fragment() {
                 }
 
                 8, 7 -> {
+                    presidentWatchCount = 1
                     fascismCount = 2
                     liberalsCount = players.size - hitlerCount - fascismCount
                 }
@@ -151,18 +149,19 @@ class GameFragment : Fragment() {
                     liberalsCount = players.size - hitlerCount - fascismCount
                 }
             }
+            initRoles(communismCount,stalinCount,fascismCount,liberalsCount)
         }
     }
 
     private fun initListeners() {
         with(binding) {
             root.setOnClickListener {
-                if (viewModel.currentPlayerIndex == players.size) {
+                if (viewModel.currentPlayerIndex == viewModel.gamePlayers.size) {
                     presentInGameScreen()
                 } else {
                     if (playerRoleTextView.isVisible) {
                         viewModel.currentPlayerIndex++
-                        if (viewModel.currentPlayerIndex == players.size) {
+                        if (viewModel.currentPlayerIndex == viewModel.gamePlayers.size) {
                             presentInGameScreen()
                         } else {
                             showNextPlayer()
@@ -253,7 +252,7 @@ class GameFragment : Fragment() {
     private fun showNextPlayer() {
         with(binding) {
             playerRoleTextView.hide()
-            playerNameTextView.text = players[viewModel.currentPlayerIndex]
+            playerNameTextView.text = viewModel.gamePlayers[viewModel.currentPlayerIndex].name
         }
     }
 
