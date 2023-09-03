@@ -81,7 +81,7 @@ class PlayersFragment : Fragment() {
         binding.playBtn.setOnClickListener {
             if ((players.size >= 5) && (players.size <= 12)) {
                 viewModel.updatePlayersList(players)
-                findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+                findNavController().navigate(R.id.action_FirstFragment_to_MainTabFragment)
             } else {
                 Toast.makeText(context, "invalid minimum players count", Toast.LENGTH_LONG).show()
             }

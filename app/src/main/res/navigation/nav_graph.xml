@@ -6,23 +6,26 @@
     app:startDestination="@id/FirstFragment">
 
     <fragment
+        android:id="@+id/MainTabFragment"
+        android:name="com.example.secrethitler.ui.pager.MainTabFragment"
+        android:label="mainTab"
+        tools:layout="@layout/fragment_main_tab">
+
+
+    </fragment>
+
+    <fragment
         android:id="@+id/FirstFragment"
         android:name="com.example.secrethitler.ui.players.PlayersFragment"
         android:label="Players"
         tools:layout="@layout/fragment_players">
-
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_FirstFragment_to_MainTabFragment"
+            app:destination="@id/MainTabFragment" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
         android:name="com.example.secrethitler.ui.game.GameFragment"
         android:label="Game"
-        tools:layout="@layout/fragment_game">
-
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_game"/>
 </navigation>
