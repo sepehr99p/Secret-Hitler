@@ -256,7 +256,6 @@ class GameFragment constructor(
         }
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -273,7 +272,6 @@ class GameFragment constructor(
             playerRoleAdapter.presidentRoleWatchListener = object : PresidentRoleWatchListener {
                 override fun onWatched() {
                     binding.watchRoleBtn.show()
-                    binding.lawMainLl.show()
                     bottomSheet.dismiss()
                 }
             }
