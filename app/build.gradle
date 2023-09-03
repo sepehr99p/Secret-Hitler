@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application' version '8.0.2'
     id 'org.jetbrains.kotlin.android' version '1.8.20'
     id "com.google.protobuf" version "0.9.1"
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -34,6 +36,9 @@ android {
     buildFeatures {
         viewBinding true
     }
+    hilt {
+        enableExperimentalClasspathAggregation = true
+    }
 }
 
 dependencies {
@@ -54,6 +59,9 @@ dependencies {
     implementation  "com.google.protobuf:protobuf-javalite:3.18.0"
 //    implementation  "com.google.protobuf:protobuf-javalite:1.0.0"
     implementation 'com.google.android.gms:play-services-drive:17.0.0'
+
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
