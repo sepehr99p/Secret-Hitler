@@ -27,4 +27,12 @@ class BoardFragment constructor(
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        with(binding) {
+            fascismCount.text = viewModel.fascismSubmittedLaw.size.toString()
+            liberalCount.text = viewModel.liberalSubmittedLaw.size.toString()
+        }
+    }
+
 }

@@ -23,8 +23,8 @@ class GameViewModel(
 
     private val laws by lazy { Stack<GameFragment.LAW>() }
     private val trashLaws = arrayListOf<GameFragment.LAW>()
-    private val liberalSubmittedLaw = arrayListOf<GameFragment.LAW>()
-    private val fascismSubmittedLaw = arrayListOf<GameFragment.LAW>()
+    val liberalSubmittedLaw = arrayListOf<GameFragment.LAW>()
+    val fascismSubmittedLaw = arrayListOf<GameFragment.LAW>()
     var currentPlayerIndex = 0
     val gamePlayers = arrayListOf<Player>()
 
