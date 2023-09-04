@@ -8,12 +8,12 @@ import androidx.fragment.app.Fragment
 import com.example.secrethitler.R
 import com.example.secrethitler.databinding.FragmentBoardBinding
 import com.example.secrethitler.databinding.WatchRoleBottomSheetBinding
+import com.example.secrethitler.ui.board.watch_role.PlayerRoleAdapter
+import com.example.secrethitler.ui.board.watch_role.PresidentRoleWatchListener
 import com.example.secrethitler.ui.game.GameViewModel
-import com.example.secrethitler.ui.game.PresidentRoleWatchListener
+import com.example.secrethitler.ui.utils.ViewHelper.hide
 import com.example.secrethitler.ui.utils.ViewHelper.show
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.example.secrethitler.ui.game.PlayerRoleAdapter
-import com.example.secrethitler.ui.utils.ViewHelper.hide
 
 class BoardFragment constructor(
     private val viewModel: GameViewModel

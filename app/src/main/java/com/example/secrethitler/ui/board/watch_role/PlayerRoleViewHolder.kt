@@ -1,4 +1,4 @@
-package com.example.secrethitler.ui.game
+package com.example.secrethitler.ui.board.watch_role
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

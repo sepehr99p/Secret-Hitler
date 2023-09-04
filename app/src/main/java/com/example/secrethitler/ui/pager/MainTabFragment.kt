@@ -32,8 +32,6 @@ class MainTabFragment : Fragment() {
 
     private val adapter by lazy { GamePagerAdapter(lifecycle,childFragmentManager,viewModel) }
 
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainTabBinding.inflate(inflater, container, false)
