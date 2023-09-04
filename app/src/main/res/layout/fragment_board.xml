@@ -50,7 +50,17 @@
             android:textSize="32sp"
             android:layout_gravity="right" />
 
+
+
     </FrameLayout>
+
+    <Button
+        android:id="@+id/watch_role_btn"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom"
+        android:text="Watch Role"/>
+
 
 
 </LinearLayout>

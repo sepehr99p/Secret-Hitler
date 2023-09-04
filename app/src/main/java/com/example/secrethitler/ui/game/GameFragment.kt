@@ -12,11 +12,9 @@ import com.example.secrethitler.R
 import com.example.secrethitler.data.Player
 import com.example.secrethitler.data.ROLE
 import com.example.secrethitler.databinding.FragmentGameBinding
-import com.example.secrethitler.databinding.WatchRoleBottomSheetBinding
 import com.example.secrethitler.ui.utils.ViewHelper.hide
 import com.example.secrethitler.ui.utils.ViewHelper.invisible
 import com.example.secrethitler.ui.utils.ViewHelper.show
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlin.random.Random
 
 class GameFragment constructor(
@@ -26,7 +24,6 @@ class GameFragment constructor(
     private var _binding: FragmentGameBinding? = null
     private val players = mutableListOf<String>()
     private val rolesInitList = mutableListOf<ROLE>()
-    private val playerRoleAdapter by lazy { PlayerRoleAdapter() }
 
 
     enum class LAW {
@@ -35,7 +32,7 @@ class GameFragment constructor(
     }
 
     private val binding get() = _binding!!
-    private var presidentWatchCount = 1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +66,6 @@ class GameFragment constructor(
         with(binding) {
             playerRoleTextView.hide()
             playerNameTextView.text = viewModel.gamePlayers[viewModel.currentPlayerIndex].name
-            watchRoleBtn.hide()
             watchLawBtn.hide()
         }
     }
@@ -83,7 +79,6 @@ class GameFragment constructor(
         rolesInitList.shuffle(Random(System.currentTimeMillis()))
         players.shuffle(Random(System.currentTimeMillis()/3))
         initFinalPlayerList()
-        playerRoleAdapter.submitList(viewModel.gamePlayers)
     }
 
     private fun initFinalPlayerList() {
@@ -157,10 +152,6 @@ class GameFragment constructor(
                     }
                 }
             }
-            watchRoleBtn.setOnClickListener {
-                presidentWatchCount--
-                presentList()
-            }
             watchLawBtn.setOnClickListener {
                 showLaw()
             }
@@ -204,18 +195,10 @@ class GameFragment constructor(
     }
 
 
-    private fun presentList() {
-        binding.watchRoleBtn.hide()
-        binding.lawMainLl.hide()
-        presentWatchRoleBottomSheet()
-    }
 
     private fun presentInGameScreen() {
         binding.playerRoleTextView.hide()
         binding.playerNameTextView.hide()
-        if (presidentWatchCount > 0) {
-            binding.watchRoleBtn.show()
-        }
         binding.watchLawBtn.show()
     }
 
@@ -261,23 +244,6 @@ class GameFragment constructor(
         _binding = null
     }
 
-    private fun presentWatchRoleBottomSheet() {
-        val bottomSheet = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
-        val bottomSheetBinding = WatchRoleBottomSheetBinding.inflate(layoutInflater)
-        with(bottomSheetBinding) {
-            bottomSheet.setContentView(root)
-            bottomSheet.behavior.isDraggable = true
-            bottomSheet.behavior.isFitToContents = true
-            recyclerView.adapter = playerRoleAdapter
-            playerRoleAdapter.presidentRoleWatchListener = object : PresidentRoleWatchListener {
-                override fun onWatched() {
-                    binding.watchRoleBtn.show()
-                    bottomSheet.dismiss()
-                }
-            }
-        }
-        bottomSheet.show()
-    }
 
 
 

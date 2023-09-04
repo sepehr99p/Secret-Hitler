@@ -20,6 +20,7 @@ class GameViewModel(
     var hitlerCount = 1
     var communismCount = 0
     var stalinCount = 0
+    var presidentWatchCount = 1
 
     private val laws by lazy { Stack<GameFragment.LAW>() }
     private val trashLaws = arrayListOf<GameFragment.LAW>()

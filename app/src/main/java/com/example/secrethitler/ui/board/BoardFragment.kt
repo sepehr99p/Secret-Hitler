@@ -5,10 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.secrethitler.R
 import com.example.secrethitler.databinding.FragmentBoardBinding
-import com.example.secrethitler.databinding.FragmentGameBinding
-import com.example.secrethitler.databinding.FragmentMainTabBinding
+import com.example.secrethitler.databinding.WatchRoleBottomSheetBinding
 import com.example.secrethitler.ui.game.GameViewModel
+import com.example.secrethitler.ui.game.PresidentRoleWatchListener
+import com.example.secrethitler.ui.utils.ViewHelper.show
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.example.secrethitler.ui.game.PlayerRoleAdapter
+import com.example.secrethitler.ui.utils.ViewHelper.hide
 
 class BoardFragment constructor(
     private val viewModel: GameViewModel
@@ -17,6 +22,7 @@ class BoardFragment constructor(
 
     private var _binding: FragmentBoardBinding? = null
     private val binding get() = _binding!!
+    private val playerRoleAdapter by lazy { PlayerRoleAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,7 +30,17 @@ class BoardFragment constructor(
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentBoardBinding.inflate(layoutInflater,container,false)
+        initListeners()
         return binding.root
+    }
+
+    private fun initListeners() {
+        with(binding) {
+            watchRoleBtn.setOnClickListener {
+                viewModel.presidentWatchCount--
+                presentWatchRoleBottomSheet()
+            }
+        }
     }
 
     override fun onResume() {
@@ -33,6 +49,41 @@ class BoardFragment constructor(
             fascismCount.text = viewModel.fascismSubmittedLaw.size.toString()
             liberalCount.text = viewModel.liberalSubmittedLaw.size.toString()
         }
+        if (viewModel.presidentWatchCount > 0) {
+            binding.watchRoleBtn.show()
+        }
     }
+
+
+
+    private fun presentWatchRoleBottomSheet() {
+        val bottomSheet = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
+        val bottomSheetBinding = WatchRoleBottomSheetBinding.inflate(layoutInflater)
+        with(bottomSheetBinding) {
+            bottomSheet.setContentView(root)
+            bottomSheet.behavior.isDraggable = true
+            bottomSheet.behavior.isFitToContents = true
+            playerRoleAdapter.submitList(viewModel.gamePlayers)
+            recyclerView.adapter = playerRoleAdapter
+            playerRoleAdapter.presidentRoleWatchListener = object : PresidentRoleWatchListener {
+                override fun onWatched() {
+                    finishWatchRole(bottomSheet)
+                }
+            }
+            bottomSheet.setOnDismissListener {
+                finishWatchRole(bottomSheet)
+            }
+        }
+        bottomSheet.show()
+    }
+
+    private fun finishWatchRole(bottomSheet : BottomSheetDialog) {
+        binding.watchRoleBtn.show()
+        bottomSheet.dismiss()
+        if (viewModel.presidentWatchCount == 0) {
+            binding.watchRoleBtn.hide()
+        }
+    }
+
 
 }
