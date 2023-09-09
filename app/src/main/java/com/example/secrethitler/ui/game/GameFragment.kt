@@ -197,11 +197,10 @@ class GameFragment constructor(
         }
         if (count == 1) {
             viewModel.submitLaw(law)
+            binding.watchLawBtn.show()
+            binding.lawMainLl.hide()
         } else if (count > 1) {
             trashTheLaw(lawIv)
-        }
-        if (count == 0) {
-            binding.lawMainLl.hide()
         }
         lawIv.invisible()
     }
@@ -236,6 +235,7 @@ class GameFragment constructor(
             law1Iv.show()
             law2Iv.show()
             law3Iv.show()
+            watchLawBtn.hide()
         }
     }
 
