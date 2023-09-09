@@ -1,13 +1,15 @@
 package com.example.secrethitler.ui.game
 
 import android.util.Log
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
+import com.example.secrethitler.R
 import com.example.secrethitler.data.Player
 import com.example.secrethitler.data.PlayersPreferencesRepository
-import com.example.secrethitler.ui.players.PlayersViewModel
 import java.util.Stack
 import kotlin.random.Random
 
@@ -23,7 +25,7 @@ class GameViewModel(
     var presidentWatchCount = 1
 
     private val laws by lazy { Stack<GameFragment.LAW>() }
-    private val trashLaws = arrayListOf<GameFragment.LAW>()
+    val trashLaws = arrayListOf<GameFragment.LAW>()
     val liberalSubmittedLaw = arrayListOf<GameFragment.LAW>()
     val fascismSubmittedLaw = arrayListOf<GameFragment.LAW>()
     var currentPlayerIndex = 0
@@ -67,22 +69,6 @@ class GameViewModel(
             trashLaws.clear()
         }
         return laws.pop()
-    }
-
-    fun getLawValue(textView: TextView): GameFragment.LAW {
-        return if (textView.text.toString() == "Liberal") {
-            GameFragment.LAW.LIBERAL
-        } else {
-            GameFragment.LAW.FASCISM
-        }
-    }
-
-    fun trashTheLaw(textView: TextView) {
-        Log.i("SEPI", "trashTheLaw: ${textView.text.toString()}")
-        Log.i("SEPI", "law: ${laws.size}")
-        Log.i("SEPI", "submit liberal: ${liberalSubmittedLaw.size}")
-        Log.i("SEPI", "submit fascism: ${fascismSubmittedLaw.size}")
-        trashLaws.add(getLawValue(textView))
     }
 
     fun getPlayerRoleText(): String = gamePlayers[currentPlayerIndex].role.toString()

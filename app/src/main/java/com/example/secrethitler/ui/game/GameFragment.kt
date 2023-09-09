@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.secrethitler.R
@@ -24,7 +26,6 @@ class GameFragment constructor(
     private var _binding: FragmentGameBinding? = null
     private val players = mutableListOf<String>()
     private val rolesInitList = mutableListOf<ROLE>()
-
 
     enum class LAW {
         LIBERAL,
@@ -155,46 +156,55 @@ class GameFragment constructor(
             watchLawBtn.setOnClickListener {
                 showLaw()
             }
-            law1Tv.setOnClickListener {
-                checkFinishedCabine(law1Tv)
+            law1Iv.setOnClickListener {
+                checkFinishedCabine(law1Iv)
             }
-            law2Tv.setOnClickListener {
-                checkFinishedCabine(law2Tv)
+            law2Iv.setOnClickListener {
+                checkFinishedCabine(law2Iv)
             }
-            law3Tv.setOnClickListener {
-                checkFinishedCabine(law3Tv)
+            law3Iv.setOnClickListener {
+                checkFinishedCabine(law3Iv)
             }
         }
     }
 
-    private fun checkFinishedCabine(lawTv: TextView) {
+    fun getLawValue(imageView: ImageView): LAW {
+        return if (imageView.background == ContextCompat.getDrawable(requireContext(),R.drawable.liberal_article)) {
+            LAW.LIBERAL
+        } else {
+            LAW.FASCISM
+        }
+    }
+
+    fun trashTheLaw(imageView: ImageView) {
+        viewModel.trashLaws.add(getLawValue(imageView))
+    }
+
+    private fun checkFinishedCabine(lawIv: ImageView) {
         var count = 0
         lateinit var law: LAW
-        if (binding.law1Tv.isVisible) {
+        if (binding.law1Iv.isVisible) {
             count++
-            law = viewModel.getLawValue(binding.law1Tv)
+            law = getLawValue(binding.law1Iv)
         }
-        if (binding.law2Tv.isVisible) {
+        if (binding.law2Iv.isVisible) {
             count++
-            law = viewModel.getLawValue(binding.law2Tv)
+            law = getLawValue(binding.law2Iv)
         }
-        if (binding.law3Tv.isVisible) {
+        if (binding.law3Iv.isVisible) {
             count++
-            law = viewModel.getLawValue(binding.law3Tv)
+            law = getLawValue(binding.law3Iv)
         }
         if (count == 1) {
             viewModel.submitLaw(law)
         } else if (count > 1) {
-            viewModel.trashTheLaw(lawTv)
+            trashTheLaw(lawIv)
         }
         if (count == 0) {
-            Log.i("SEPI", "checkFinishedCabine: count = 0")
             binding.lawMainLl.hide()
         }
-        lawTv.invisible()
+        lawIv.invisible()
     }
-
-
 
     private fun presentInGameScreen() {
         binding.playerRoleTextView.hide()
@@ -219,23 +229,21 @@ class GameFragment constructor(
 
     private fun showLaw() {
         with(binding) {
-            setLawCard(law1Tv)
-            setLawCard(law2Tv)
-            setLawCard(law3Tv)
+            setLawCard(law1Iv)
+            setLawCard(law2Iv)
+            setLawCard(law3Iv)
             lawMainLl.show()
-            law1Tv.show()
-            law2Tv.show()
-            law3Tv.show()
+            law1Iv.show()
+            law2Iv.show()
+            law3Iv.show()
         }
     }
 
-    private fun setLawCard(lawTv: TextView) {
+    private fun setLawCard(lawIv: ImageView) {
         if (viewModel.getLaw() == LAW.LIBERAL) {
-            lawTv.background = this.resources.getDrawable(R.drawable.bg_rectangle_blue)
-            lawTv.text = "Liberal"
+            lawIv.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.liberal_article))
         } else {
-            lawTv.background = this.resources.getDrawable(R.drawable.bg_rectangle_red)
-            lawTv.text = "fascism"
+            lawIv.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.fascist_article))
         }
     }
 
@@ -243,8 +251,5 @@ class GameFragment constructor(
         super.onDestroyView()
         _binding = null
     }
-
-
-
 
 }
