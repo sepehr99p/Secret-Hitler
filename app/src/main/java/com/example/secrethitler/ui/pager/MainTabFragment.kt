@@ -40,7 +40,7 @@ class MainTabFragment : Fragment() {
 
         TabLayoutMediator(
             binding.tabLayout, binding.viewPager
-        ) { tab: TabLayout.Tab, position: Int -> tab.text = "Tab " + (position + 1) }.attach()
+        ) { tab: TabLayout.Tab, position: Int -> tab.text = "Screen " + (position + 1) }.attach()
 
         return binding.root
     }
