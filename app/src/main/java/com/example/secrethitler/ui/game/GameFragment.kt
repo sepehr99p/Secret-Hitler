@@ -168,7 +168,7 @@ class GameFragment constructor(
         }
     }
 
-    fun getLawValue(imageView: ImageView): LAW {
+    private fun getLawValue(imageView: ImageView): LAW {
         return if (imageView.background == ContextCompat.getDrawable(requireContext(),R.drawable.liberal_article)) {
             LAW.LIBERAL
         } else {
@@ -176,7 +176,7 @@ class GameFragment constructor(
         }
     }
 
-    fun trashTheLaw(imageView: ImageView) {
+    private fun trashTheLaw(imageView: ImageView) {
         viewModel.trashLaws.add(getLawValue(imageView))
     }
 
