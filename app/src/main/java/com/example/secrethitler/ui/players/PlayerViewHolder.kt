@@ -7,10 +7,11 @@ import com.example.secrethitler.R
 import com.example.secrethitler.databinding.PlayerItemBinding
 
 class PlayerViewHolder(
-    private val binding: PlayerItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    private val binding: PlayerItemBinding
+) : RecyclerView.ViewHolder(binding.root) {
 
 
-    fun bind(name : String) {
+    fun bind(name: String) {
         binding.nameTv.text = name
     }
 

@@ -29,7 +29,7 @@ class BoardFragment constructor(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentBoardBinding.inflate(layoutInflater,container,false)
+        _binding = FragmentBoardBinding.inflate(layoutInflater, container, false)
         initListeners()
         return binding.root
     }
@@ -55,7 +55,6 @@ class BoardFragment constructor(
     }
 
 
-
     private fun presentWatchRoleBottomSheet() {
         val bottomSheet = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         val bottomSheetBinding = WatchRoleBottomSheetBinding.inflate(layoutInflater)
@@ -77,7 +76,7 @@ class BoardFragment constructor(
         bottomSheet.show()
     }
 
-    private fun finishWatchRole(bottomSheet : BottomSheetDialog) {
+    private fun finishWatchRole(bottomSheet: BottomSheetDialog) {
         binding.watchRoleBtn.show()
         bottomSheet.dismiss()
         if (viewModel.presidentWatchCount == 0) {

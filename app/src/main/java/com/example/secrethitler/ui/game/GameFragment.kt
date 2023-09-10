@@ -1,13 +1,11 @@
 package com.example.secrethitler.ui.game
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.secrethitler.R
@@ -71,24 +69,29 @@ class GameFragment constructor(
         }
     }
 
-    private fun initRoles(communismCount : Int, stalinCount : Int, fascismCount : Int, liberalCount : Int) {
-        createRole(communismCount,ROLE.COMMUNISM)
-        createRole(stalinCount,ROLE.STALIN)
-        createRole(fascismCount,ROLE.FASCISM)
-        createRole(liberalCount,ROLE.LIBERAL)
-        createRole(1,ROLE.HITLER)
+    private fun initRoles(
+        communismCount: Int,
+        stalinCount: Int,
+        fascismCount: Int,
+        liberalCount: Int
+    ) {
+        createRole(communismCount, ROLE.COMMUNISM)
+        createRole(stalinCount, ROLE.STALIN)
+        createRole(fascismCount, ROLE.FASCISM)
+        createRole(liberalCount, ROLE.LIBERAL)
+        createRole(1, ROLE.HITLER)
         rolesInitList.shuffle(Random(System.currentTimeMillis()))
-        players.shuffle(Random(System.currentTimeMillis()/3))
+        players.shuffle(Random(System.currentTimeMillis() / 3))
         initFinalPlayerList()
     }
 
     private fun initFinalPlayerList() {
-        for (i in 0 until  players.size) {
-            viewModel.gamePlayers.add(Player(players.removeLast(),rolesInitList.removeLast()))
+        for (i in 0 until players.size) {
+            viewModel.gamePlayers.add(Player(players.removeLast(), rolesInitList.removeLast()))
         }
     }
 
-    private fun createRole(count : Int, role : ROLE) {
+    private fun createRole(count: Int, role: ROLE) {
         for (i in 0 until count) {
             rolesInitList.add(role)
         }
@@ -103,7 +106,7 @@ class GameFragment constructor(
                     stalinCount = 1
                     fascismCount = 3
                     liberalsCount = players.size - hitlerCount - fascismCount
-                    initRoles(communismCount,stalinCount,fascismCount,liberalsCount)
+                    initRoles(communismCount, stalinCount, fascismCount, liberalsCount)
                 }
 
                 11 -> {
@@ -131,7 +134,7 @@ class GameFragment constructor(
                     liberalsCount = players.size - hitlerCount - fascismCount
                 }
             }
-            initRoles(communismCount,stalinCount,fascismCount,liberalsCount)
+            initRoles(communismCount, stalinCount, fascismCount, liberalsCount)
         }
     }
 
@@ -169,7 +172,11 @@ class GameFragment constructor(
     }
 
     private fun getLawValue(imageView: ImageView): LAW {
-        return if (imageView.background == ContextCompat.getDrawable(requireContext(),R.drawable.liberal_article)) {
+        return if (imageView.background == ContextCompat.getDrawable(
+                requireContext(),
+                R.drawable.liberal_article
+            )
+        ) {
             LAW.LIBERAL
         } else {
             LAW.FASCISM
@@ -241,9 +248,19 @@ class GameFragment constructor(
 
     private fun setLawCard(lawIv: ImageView) {
         if (viewModel.getLaw() == LAW.LIBERAL) {
-            lawIv.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.liberal_article))
+            lawIv.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.liberal_article
+                )
+            )
         } else {
-            lawIv.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.fascist_article))
+            lawIv.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.fascist_article
+                )
+            )
         }
     }
 

@@ -1,32 +1,23 @@
 package com.example.secrethitler.ui.players
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
-import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.codelab.android.datastore.PlayerPreferences
 import com.example.secrethitler.R
-import com.example.secrethitler.data.PlayerPreferencesSerializer
 import com.example.secrethitler.data.PlayersPreferencesRepository
 import com.example.secrethitler.databinding.FragmentPlayersBinding
 import com.example.secrethitler.databinding.PlayerCreationBottomSheetBinding
-import com.example.secrethitler.ui.MainActivity
 import com.example.secrethitler.ui.playersPreferencesStore
 import com.google.android.material.bottomsheet.BottomSheetDialog
-
-
 
 
 class PlayersFragment : Fragment() {
@@ -46,7 +37,10 @@ class PlayersFragment : Fragment() {
 
 
     private val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
-        ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.DOWN or ItemTouchHelper.UP) {
+        ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.DOWN or ItemTouchHelper.UP
+        ) {
         override fun onMove(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder,
@@ -105,7 +99,8 @@ class PlayersFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        binding.playersRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.playersRv.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.playersRv.adapter = adapter
         adapter.submitList(players)
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)

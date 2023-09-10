@@ -23,7 +23,7 @@ class PlayersViewModel(
 
     private val playerPreferencesFlow = playersPreferencesRepository.playerPreferencesFlow
 
-    fun updatePlayersList(newList : List<String>) {
+    fun updatePlayersList(newList: List<String>) {
         viewModelScope.launch {
             playersPreferencesRepository.updatePlayers(newList)
         }

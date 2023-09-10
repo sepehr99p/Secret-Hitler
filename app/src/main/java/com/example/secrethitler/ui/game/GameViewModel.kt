@@ -1,13 +1,9 @@
 package com.example.secrethitler.ui.game
 
 import android.util.Log
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
-import com.example.secrethitler.R
 import com.example.secrethitler.data.Player
 import com.example.secrethitler.data.PlayersPreferencesRepository
 import java.util.Stack
@@ -46,16 +42,13 @@ class GameViewModel(
         laws.clear()
         laws.addAll(trashLaws)
         trashLaws.clear()
-        Log.i("SEPI", "initLaws: $laws")
     }
 
     fun submitLaw(last: GameFragment.LAW) {
         if (last.name == GameFragment.LAW.LIBERAL.name) {
             liberalSubmittedLaw.add(last)
-            Log.i("SEPI", "submitLaw: liberal")
         } else {
             fascismSubmittedLaw.add(last)
-            Log.i("SEPI", "submitLaw: fascism")
         }
     }
 
@@ -63,9 +56,6 @@ class GameViewModel(
         if (laws.empty()) {
             trashLaws.shuffle(Random(System.currentTimeMillis()))
             laws.addAll(trashLaws)
-            Log.i("SEPI", "getLaw: shuffled new ${laws.size} ")
-            Log.i("SEPI", "getLaw: submitted liberal ${liberalSubmittedLaw.size}")
-            Log.i("SEPI", "getLaw: submitted fascism ${fascismSubmittedLaw.size}")
             trashLaws.clear()
         }
         return laws.pop()

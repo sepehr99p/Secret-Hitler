@@ -12,7 +12,7 @@ class GamePagerAdapter(
     lifecycle: Lifecycle,
     fragmentManager: FragmentManager,
     private val viewModel: GameViewModel
-) : FragmentStateAdapter(fragmentManager,lifecycle) {
+) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
     override fun getItemCount(): Int = 2
 
