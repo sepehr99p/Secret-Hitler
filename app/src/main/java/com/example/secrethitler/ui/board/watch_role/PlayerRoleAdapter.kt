@@ -6,6 +6,7 @@ import androidx.core.os.postDelayed
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.secrethitler.data.Player
+import com.example.secrethitler.data.ROLE
 import com.example.secrethitler.ui.utils.ViewHelper.show
 
 
@@ -41,6 +42,9 @@ class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMP
     }
 
     private fun showRole(holder: PlayerRoleViewHolder) {
+        if (holder.binding.playerRoleTv.text.contains(ROLE.HITLER.name)) {
+            holder.binding.playerRoleTv.text = ROLE.FASCISM.name
+        }
         holder.binding.playerRoleTv.show()
         isVisible = true
     }
