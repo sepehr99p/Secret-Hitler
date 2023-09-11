@@ -15,7 +15,7 @@ import com.example.secrethitler.R
 import com.example.secrethitler.data.PlayerPreferencesSerializer
 import com.example.secrethitler.databinding.ActivityMainBinding
 
-public val Context.playersPreferencesStore: DataStore<PlayerPreferences> by dataStore(
+val Context.playersPreferencesStore: DataStore<PlayerPreferences> by dataStore(
     fileName = "players.pb",
     serializer = PlayerPreferencesSerializer
 )
