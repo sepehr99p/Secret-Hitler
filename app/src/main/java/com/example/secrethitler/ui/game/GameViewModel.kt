@@ -53,7 +53,7 @@ class GameViewModel(
     }
 
     fun getLaw(): GameFragment.LAW {
-        if (laws.empty()) {
+        if (laws.isEmpty()) {
             trashLaws.shuffle(Random(System.currentTimeMillis()))
             laws.addAll(trashLaws)
             trashLaws.clear()
