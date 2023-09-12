@@ -1,5 +1,6 @@
 package com.example.secrethitler.ui.game
 
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -172,10 +173,10 @@ class GameFragment constructor(
     }
 
     private fun getLawValue(imageView: ImageView): LAW {
-        return if (imageView.background == ContextCompat.getDrawable(
+        return if ((imageView.drawable as BitmapDrawable).bitmap == (ContextCompat.getDrawable(
                 requireContext(),
                 R.drawable.liberal_article
-            )
+            ) as BitmapDrawable).bitmap
         ) {
             LAW.LIBERAL
         } else {
