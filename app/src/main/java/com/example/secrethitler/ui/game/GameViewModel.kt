@@ -1,11 +1,14 @@
 package com.example.secrethitler.ui.game
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
 import com.example.secrethitler.data.Player
 import com.example.secrethitler.data.PlayersPreferencesRepository
+import com.example.secrethitler.data.ROLE
 import java.util.Stack
 import kotlin.random.Random
 
@@ -26,6 +29,11 @@ class GameViewModel(
     val fascismSubmittedLaw = arrayListOf<GameFragment.LAW>()
     var currentPlayerIndex = 0
     val gamePlayers = arrayListOf<Player>()
+
+
+    private val _whoWon = MutableLiveData<ROLE>()
+    val whoWon : LiveData<ROLE> get() = _whoWon
+
 
     val initialSetupEvent = liveData {
         emit(playersPreferencesRepository.fetchInitialPreferences())
@@ -49,6 +57,15 @@ class GameViewModel(
             liberalSubmittedLaw.add(last)
         } else {
             fascismSubmittedLaw.add(last)
+        }
+        checkGameResult()
+    }
+
+    private fun checkGameResult() {
+        if (liberalSubmittedLaw.size == 5 ) {
+            _whoWon.value = ROLE.LIBERAL
+        } else if (fascismSubmittedLaw.size ==6) {
+            _whoWon.value = ROLE.FASCISM
         }
     }
 

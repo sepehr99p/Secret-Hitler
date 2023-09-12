@@ -1,5 +1,6 @@
 package com.example.secrethitler.ui.game
 
+import android.app.AlertDialog
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -60,7 +61,22 @@ class GameFragment constructor(
             viewModel.initLaws()
             initView()
         }
+        viewModel.whoWon.observe(viewLifecycleOwner) {
+            var icon : Int = R.drawable.liberal_article
+            if (it == ROLE.FASCISM) {
+                icon = R.drawable.fascist_article
+            } else if (it == ROLE.LIBERAL) {
+                icon = R.drawable.liberal_article
+            }
+            AlertDialog.Builder(requireContext())
+                .setTitle("Game over")
+                .setMessage("${it.name} WON !!!")
+                .setCancelable(false)
+                .setIcon(icon)
+                .create().show()
+        }
     }
+
 
     private fun initView() {
         with(binding) {
