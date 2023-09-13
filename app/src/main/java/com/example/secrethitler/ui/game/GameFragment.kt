@@ -14,6 +14,7 @@ import com.example.secrethitler.R
 import com.example.secrethitler.data.Player
 import com.example.secrethitler.data.ROLE
 import com.example.secrethitler.databinding.FragmentGameBinding
+import com.example.secrethitler.ui.MainActivity
 import com.example.secrethitler.ui.utils.ViewHelper.hide
 import com.example.secrethitler.ui.utils.ViewHelper.invisible
 import com.example.secrethitler.ui.utils.ViewHelper.show
@@ -62,6 +63,7 @@ class GameFragment constructor(
             initView()
         }
         viewModel.whoWon.observe(viewLifecycleOwner) {
+            (activity as MainActivity).analytics.logEvent(it.name,null)
             var icon : Int = R.drawable.liberal_article
             if (it == ROLE.FASCISM) {
                 icon = R.drawable.fascist_article
