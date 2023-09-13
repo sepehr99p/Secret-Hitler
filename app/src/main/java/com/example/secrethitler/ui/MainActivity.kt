@@ -14,6 +14,9 @@ import com.codelab.android.datastore.PlayerPreferences
 import com.example.secrethitler.R
 import com.example.secrethitler.data.PlayerPreferencesSerializer
 import com.example.secrethitler.databinding.ActivityMainBinding
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 
 val Context.playersPreferencesStore: DataStore<PlayerPreferences> by dataStore(
     fileName = "players.pb",
@@ -24,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var analytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -40,6 +44,9 @@ class MainActivity : AppCompatActivity() {
         actionBar?.hide()
         supportActionBar?.hide()
         setContentView(binding.root)
+
+        // Obtain the FirebaseAnalytics instance.
+        analytics = Firebase.analytics
     }
 
 

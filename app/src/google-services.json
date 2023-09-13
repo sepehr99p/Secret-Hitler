@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "902452091110",
+    "project_id": "secret-hitler-b0ef8",
+    "storage_bucket": "secret-hitler-b0ef8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:902452091110:android:5da427a5080b9ae89e0327",
+        "android_client_info": {
+          "package_name": "com.example.secrethitler"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFZdgMwG7UFiMGputc_CU8E3hCvnuBrJI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
