@@ -37,6 +37,13 @@
         android:weightSum="3">
 
         <ImageView
+            android:id="@+id/law_hider_iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:src="@drawable/law_hide_bg"/>
+
+        <ImageView
             android:id="@+id/law_1_iv"
             android:layout_width="0dp"
             android:layout_height="match_parent"
