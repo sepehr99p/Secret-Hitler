@@ -1,6 +1,7 @@
 package com.example.secrethitler.ui.pager
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.secrethitler.R
 import com.example.secrethitler.data.PlayersPreferencesRepository
 import com.example.secrethitler.databinding.FragmentMainTabBinding
+import com.example.secrethitler.ui.MainActivity
 import com.example.secrethitler.ui.game.GameViewModel
 import com.example.secrethitler.ui.game.GameViewModelFactory
 import com.example.secrethitler.ui.playersPreferencesStore
@@ -42,9 +44,34 @@ class MainTabFragment : Fragment() {
 
         binding.viewPager.adapter = adapter
 
+
         TabLayoutMediator(
             binding.tabLayout, binding.viewPager
         ) { tab: TabLayout.Tab, position: Int -> tab.text = "Screen " + (position + 1) }.attach()
+
+
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                Log.i("TAG", "onTabSelected: ")
+                tab?.let { _tab ->
+                    if (_tab.position != 0) {
+                        if (MainActivity.rolesAreWatched) {
+                            binding.viewPager.currentItem = _tab.position
+                        }
+                    }
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+
+        })
+
 
         return binding.root
     }
