@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingHorizontal="16dp"
+    android:paddingVertical="16dp"
     tools:context=".ui.board.BoardFragment">
 
     <FrameLayout
