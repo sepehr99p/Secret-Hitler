@@ -57,7 +57,7 @@ class PlayersFragment : Fragment() {
             val position = viewHolder.adapterPosition
             players.removeAt(position)
             adapter.submitList(players)
-            adapter.notifyDataSetChanged()
+            adapter.notifyItemRemoved(position)
         }
     }
 
@@ -85,7 +85,6 @@ class PlayersFragment : Fragment() {
 
     private fun initObservers() {
         viewModel.initialSetupEvent.observe(viewLifecycleOwner) {
-//            Log.i("SEPI", "initObservers: ")
             players.clear()
             players.addAll(it.namesList)
             adapter.submitList(players)
@@ -123,7 +122,7 @@ class PlayersFragment : Fragment() {
             addPlayerSubmitBtn.setOnClickListener {
                 players.add(addPlayerNameEt.text.toString())
                 adapter.submitList(players)
-                adapter.notifyDataSetChanged()
+                adapter.notifyItemInserted(adapter.itemCount+1)
                 bottomSheet.dismiss()
             }
             addPlayerNameEt.setOnEditorActionListener { _, actionId, _ ->
@@ -131,7 +130,7 @@ class PlayersFragment : Fragment() {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     players.add(addPlayerNameEt.text.toString())
                     adapter.submitList(players)
-                    adapter.notifyDataSetChanged()
+                    adapter.notifyItemInserted(adapter.itemCount+1)
                     bottomSheet.dismiss()
                     handled = true
                 }
