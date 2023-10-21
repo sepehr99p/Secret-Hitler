@@ -12,6 +12,9 @@
         tools:layout="@layout/fragment_main_tab">
 
 
+        <action
+            android:id="@+id/action_MainTabFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
     </fragment>
 
     <fragment
