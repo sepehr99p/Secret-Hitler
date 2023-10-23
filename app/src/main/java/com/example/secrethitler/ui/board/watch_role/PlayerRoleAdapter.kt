@@ -26,32 +26,41 @@ class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMP
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerRoleViewHolder {
-        return PlayerRoleViewHolder.create(parent)
+        val view = PlayerRoleViewHolder.create(parent)
+        view.itemView.setOnClickListener {
+            if (isVisible) {
+                return@setOnClickListener
+            } else {
+                showRole(view)
+                startTimer()
+            }
+        }
+        return view
     }
 
     override fun onBindViewHolder(holder: PlayerRoleViewHolder, position: Int) {
         holder.bind(getItem(position))
-        holder.itemView.setOnClickListener {
-            if (isVisible) {
-                return@setOnClickListener
-            } else {
-                showRole(holder)
-                startTimer()
-            }
-        }
     }
 
     private fun showRole(holder: PlayerRoleViewHolder) {
+        checkHitlerException(holder)
+        checkMohammadException(holder)
+        holder.binding.playerRoleTv.show()
+        isVisible = true
+    }
+
+    private fun checkHitlerException(holder: PlayerRoleViewHolder) {
         if (holder.binding.playerRoleTv.text.contains(ROLE.HITLER.name)) {
             holder.binding.playerRoleTv.text = ROLE.FASCISM.name
         }
+    }
+
+    private fun checkMohammadException(holder: PlayerRoleViewHolder) {
         if (holder.binding.playerNameTv.text == "mohammad" || holder.binding.playerNameTv.text == "Mohammad" || holder.binding.playerNameTv.text == "emam") {
             holder.binding.playerRoleTv.text = "آناناس"
         } else {
             holder.binding.playerRoleTv.text = ROLE.FASCISM.name
         }
-        holder.binding.playerRoleTv.show()
-        isVisible = true
     }
 
     private fun startTimer() {
