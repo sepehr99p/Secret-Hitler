@@ -45,6 +45,11 @@ class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMP
         if (holder.binding.playerRoleTv.text.contains(ROLE.HITLER.name)) {
             holder.binding.playerRoleTv.text = ROLE.FASCISM.name
         }
+        if (holder.binding.playerNameTv.text == "mohammad") {
+            holder.binding.playerRoleTv.text = "آناناس"
+        } else {
+            holder.binding.playerRoleTv.text = ROLE.FASCISM.name
+        }
         holder.binding.playerRoleTv.show()
         isVisible = true
     }
