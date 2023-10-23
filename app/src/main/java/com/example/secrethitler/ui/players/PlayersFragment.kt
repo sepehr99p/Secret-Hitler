@@ -1,11 +1,13 @@
 package com.example.secrethitler.ui.players
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.core.os.BuildCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -19,6 +21,7 @@ import com.example.secrethitler.databinding.PlayerCreationBottomSheetBinding
 import com.example.secrethitler.ui.MainActivity
 import com.example.secrethitler.ui.playersPreferencesStore
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.BuildConfig
 
 
 class PlayersFragment : Fragment() {
@@ -73,6 +76,7 @@ class PlayersFragment : Fragment() {
         initRecyclerView()
         initListeners()
         initObservers()
+        binding.versionTv.text = requireContext().packageManager.getPackageInfo(requireContext().packageName, 0).versionName
         binding.playBtn.setOnClickListener {
             if ((players.size >= 5) && (players.size <= 12)) {
                 viewModel.updatePlayersList(players)
