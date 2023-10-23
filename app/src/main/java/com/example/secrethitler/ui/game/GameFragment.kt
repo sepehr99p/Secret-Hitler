@@ -71,7 +71,7 @@ class GameFragment constructor(
                 icon = R.drawable.liberal_article
             }
             AlertDialog.Builder(requireContext())
-                .setTitle("Game over")
+                .setTitle(requireContext().resources.getString(R.string.game_over))
                 .setMessage("${it.name} WON !!!")
                 .setCancelable(false)
                 .setIcon(icon)

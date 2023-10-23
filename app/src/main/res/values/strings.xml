@@ -44,4 +44,6 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="play">Play</string>
+    <string name="invalid_player_count">invalid minimum players count</string>
+    <string name="game_over">Game over</string>
 </resources>

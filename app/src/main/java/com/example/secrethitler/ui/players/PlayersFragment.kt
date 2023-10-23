@@ -82,7 +82,7 @@ class PlayersFragment : Fragment() {
                 viewModel.updatePlayersList(players)
                 findNavController().navigate(R.id.action_FirstFragment_to_MainTabFragment)
             } else {
-                Toast.makeText(context, "invalid minimum players count", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, requireContext().resources.getString(R.string.invalid_player_count), Toast.LENGTH_LONG).show()
             }
         }
     }
