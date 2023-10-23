@@ -20,7 +20,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 
-class MainTabFragment : Fragment() {
+class MainTabFragment : Fragment(), TabLayout.OnTabSelectedListener {
 
     private var _binding: FragmentMainTabBinding? = null
     private val binding get() = _binding!!
@@ -50,41 +50,46 @@ class MainTabFragment : Fragment() {
         ) { tab: TabLayout.Tab, position: Int -> tab.text = "Screen " + (position + 1) }.attach()
 
 
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                Log.i("TAG", "onTabSelected: ")
-                tab?.let { _tab ->
-                    if (_tab.position != 0) {
-                        if (MainActivity.rolesAreWatched) {
-                            binding.viewPager.currentItem = _tab.position
-                        }
-                    }
-                }
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-
-            }
-
-        })
-
+        binding.tabLayout.addOnTabSelectedListener(this)
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,object  : OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                val bundle = Bundle()
-                bundle.putBoolean("reset", true)
-                findNavController().navigate(R.id.action_MainTabFragment_to_FirstFragment,bundle)
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val bundle = Bundle()
+                    bundle.putBoolean("reset", true)
+                    findNavController().navigate(
+                        R.id.action_MainTabFragment_to_FirstFragment,
+                        bundle
+                    )
+                }
+            })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.tabLayout.removeOnTabSelectedListener(this)
+    }
+
+    override fun onTabSelected(tab: TabLayout.Tab?) {
+        Log.i("TAG", "onTabSelected: ")
+        tab?.let { _tab ->
+            if (_tab.position != 0) {
+                if (MainActivity.rolesAreWatched) {
+                    binding.viewPager.currentItem = _tab.position
+                }
             }
-        })
+        }
+    }
+
+    override fun onTabUnselected(tab: TabLayout.Tab?) {
+    }
+
+    override fun onTabReselected(tab: TabLayout.Tab?) {
     }
 
 

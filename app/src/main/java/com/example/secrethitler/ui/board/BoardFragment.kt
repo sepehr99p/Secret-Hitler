@@ -58,8 +58,7 @@ class BoardFragment constructor(
 
     private fun presentWatchRoleBottomSheet() {
         val bottomSheet = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
-        val bottomSheetBinding = WatchRoleBottomSheetBinding.inflate(layoutInflater)
-        with(bottomSheetBinding) {
+        with(WatchRoleBottomSheetBinding.inflate(layoutInflater)) {
             bottomSheet.setContentView(root)
             bottomSheet.behavior.isDraggable = true
             bottomSheet.behavior.isFitToContents = true
