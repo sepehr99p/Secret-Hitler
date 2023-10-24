@@ -36,7 +36,7 @@ class PlayersFragment : Fragment() {
             PlayersViewModelFactory(
                 PlayersPreferencesRepository(requireContext().playersPreferencesStore)
             )
-        ).get(PlayersViewModel::class.java)
+        )[PlayersViewModel::class.java]
     }
 
 
@@ -76,13 +76,20 @@ class PlayersFragment : Fragment() {
         initRecyclerView()
         initListeners()
         initObservers()
-        binding.versionTv.text = requireContext().packageManager.getPackageInfo(requireContext().packageName, 0).versionName
+        binding.versionTv.text = requireContext().packageManager.getPackageInfo(
+            requireContext().packageName,
+            0
+        ).versionName
         binding.playBtn.setOnClickListener {
             if ((players.size >= 5) && (players.size <= 12)) {
                 viewModel.updatePlayersList(players)
                 findNavController().navigate(R.id.action_FirstFragment_to_MainTabFragment)
             } else {
-                Toast.makeText(context, requireContext().resources.getString(R.string.invalid_player_count), Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    requireContext().resources.getString(R.string.invalid_player_count),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -126,7 +133,7 @@ class PlayersFragment : Fragment() {
             addPlayerSubmitBtn.setOnClickListener {
                 players.add(addPlayerNameEt.text.toString())
                 adapter.submitList(players)
-                adapter.notifyItemInserted(adapter.itemCount+1)
+                adapter.notifyItemInserted(adapter.itemCount + 1)
                 bottomSheet.dismiss()
             }
             addPlayerNameEt.setOnEditorActionListener { _, actionId, _ ->
@@ -134,7 +141,7 @@ class PlayersFragment : Fragment() {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     players.add(addPlayerNameEt.text.toString())
                     adapter.submitList(players)
-                    adapter.notifyItemInserted(adapter.itemCount+1)
+                    adapter.notifyItemInserted(adapter.itemCount + 1)
                     bottomSheet.dismiss()
                     handled = true
                 }
