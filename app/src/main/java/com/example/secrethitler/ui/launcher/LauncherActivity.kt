@@ -26,7 +26,7 @@ class LauncherActivity : AppCompatActivity() {
                     MainActivity::class.java
                 )
             )
-        }, 3000)
+        }, 2000)
 
     }
 
