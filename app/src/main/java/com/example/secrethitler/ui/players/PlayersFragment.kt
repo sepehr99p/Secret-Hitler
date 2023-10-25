@@ -1,13 +1,11 @@
 package com.example.secrethitler.ui.players
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
-import androidx.core.os.BuildCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -18,10 +16,8 @@ import com.example.secrethitler.R
 import com.example.secrethitler.data.PlayersPreferencesRepository
 import com.example.secrethitler.databinding.FragmentPlayersBinding
 import com.example.secrethitler.databinding.PlayerCreationBottomSheetBinding
-import com.example.secrethitler.ui.MainActivity
 import com.example.secrethitler.ui.playersPreferencesStore
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.BuildConfig
 
 
 class PlayersFragment : Fragment() {
