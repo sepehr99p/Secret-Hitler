@@ -58,8 +58,6 @@ class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMP
     private fun checkMohammadException(holder: PlayerRoleViewHolder) {
         if (holder.binding.playerNameTv.text == "mohammad" || holder.binding.playerNameTv.text == "Mohammad" || holder.binding.playerNameTv.text == "emam") {
             holder.binding.playerRoleTv.text = "آناناس"
-        } else {
-            holder.binding.playerRoleTv.text = ROLE.FASCISM.name
         }
     }
 
