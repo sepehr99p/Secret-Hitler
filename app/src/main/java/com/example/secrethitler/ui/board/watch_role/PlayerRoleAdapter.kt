@@ -43,10 +43,14 @@ class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMP
     }
 
     private fun showRole(holder: PlayerRoleViewHolder) {
-        checkHitlerException(holder)
-        checkMohammadException(holder)
+        checkExceptions(holder)
         holder.binding.playerRoleTv.show()
         isVisible = true
+    }
+
+    private fun checkExceptions(holder: PlayerRoleViewHolder) {
+        checkHitlerException(holder)
+        checkMohammadException(holder)
     }
 
     private fun checkHitlerException(holder: PlayerRoleViewHolder) {
