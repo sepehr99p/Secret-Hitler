@@ -187,9 +187,6 @@ class GameFragment constructor(
             law3Iv.setOnClickListener {
                 checkFinishedCabine(law3Iv)
             }
-            lawHiderIv.setOnClickListener{
-                lawHiderIv.hide()
-            }
         }
     }
 
@@ -223,9 +220,6 @@ class GameFragment constructor(
         if (binding.law3Iv.isVisible) {
             count++
             law = getLawValue(binding.law3Iv)
-        }
-        if (count == 3) {
-            binding.lawHiderIv.show()
         }
         if (count == 1) {
             viewModel.submitLaw(law)
