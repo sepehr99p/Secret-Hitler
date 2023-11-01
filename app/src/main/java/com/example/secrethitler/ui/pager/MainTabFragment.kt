@@ -1,11 +1,14 @@
 package com.example.secrethitler.ui.pager
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.DialogCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -60,12 +63,20 @@ class MainTabFragment : Fragment(), TabLayout.OnTabSelectedListener {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    val bundle = Bundle()
-                    bundle.putBoolean("reset", true)
-                    findNavController().navigate(
-                        R.id.action_MainTabFragment_to_FirstFragment,
-                        bundle
-                    )
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("Quit")
+                        .setMessage("Are you sure?")
+                        .setNegativeButton("NO", { _, _ -> })
+                        .setPositiveButton("YES") { _, _ ->
+                            val bundle = Bundle()
+                            bundle.putBoolean("reset", true)
+                            findNavController().navigate(
+                                R.id.action_MainTabFragment_to_FirstFragment,
+                                bundle
+                            )
+                        }
+                        .create()
+                        .show()
                 }
             })
     }
