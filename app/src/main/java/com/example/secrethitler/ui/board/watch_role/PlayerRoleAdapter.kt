@@ -2,9 +2,7 @@ package com.example.secrethitler.ui.board.watch_role
 
 import android.os.Handler
 import android.os.Looper
-import android.os.Message
 import android.view.ViewGroup
-import androidx.core.os.postDelayed
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.secrethitler.data.Player

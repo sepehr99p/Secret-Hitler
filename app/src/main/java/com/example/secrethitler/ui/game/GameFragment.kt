@@ -3,11 +3,16 @@ package com.example.secrethitler.ui.game
 import android.app.AlertDialog
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.os.postDelayed
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.secrethitler.R
@@ -52,6 +57,28 @@ class GameFragment constructor(
         super.onViewCreated(view, savedInstanceState)
         initObservers()
         initListeners()
+        setupRoleAnimation()
+    }
+
+    private fun setupRoleAnimation() {
+        animateRoleTextView(fadeOut,1)
+    }
+
+    private val fadeOut = AlphaAnimation(0.4f,0.0f)
+    private val fadeIn = AlphaAnimation(0.0f,0.4f)
+
+    private fun animateRoleTextView(alphaAnimation: AlphaAnimation, number : Int) {
+        var myNumber : Int = number
+        alphaAnimation.duration = 500
+        binding.playerRoleTextView.clearAnimation()
+        binding.playerRoleTextView.startAnimation(alphaAnimation)
+        Handler(Looper.getMainLooper()).postDelayed(500) {
+            if (number % 2 == 0) {
+                animateRoleTextView(fadeOut,++myNumber)
+            } else {
+                animateRoleTextView(fadeIn,++myNumber)
+            }
+        }
     }
 
     private fun initObservers() {
