@@ -1,12 +1,12 @@
 package com.example.secrethitler.ui.board
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.secrethitler.R
+import com.example.secrethitler.data.Player
 import com.example.secrethitler.databinding.FragmentBoardBinding
 import com.example.secrethitler.databinding.WatchRoleBottomSheetBinding
 import com.example.secrethitler.ui.board.watch_role.PlayerRoleAdapter
@@ -65,7 +65,8 @@ class BoardFragment constructor(
             playerRoleAdapter.submitList(viewModel.gamePlayers)
             recyclerView.adapter = playerRoleAdapter
             playerRoleAdapter.presidentRoleWatchListener = object : PresidentRoleWatchListener {
-                override fun onWatched() {
+                override fun onWatched(item: Player) {
+                    viewModel.gamePlayers.remove(item)
                     finishWatchRole(bottomSheet)
                 }
             }

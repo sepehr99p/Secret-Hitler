@@ -32,7 +32,7 @@ class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMP
                 return@setOnClickListener
             } else {
                 showRole(view)
-                startTimer()
+                startTimer(view.adapterPosition)
             }
         }
         return view
@@ -65,10 +65,10 @@ class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMP
         }
     }
 
-    private fun startTimer() {
+    private fun startTimer(adapterPosition: Int) {
         Handler().postDelayed(5000) {
             isVisible = false
-            presidentRoleWatchListener?.onWatched()
+            presidentRoleWatchListener?.onWatched(getItem(adapterPosition))
             notifyDataSetChanged()
         }
     }
