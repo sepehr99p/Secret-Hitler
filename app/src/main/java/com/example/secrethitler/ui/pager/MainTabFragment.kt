@@ -33,7 +33,7 @@ class MainTabFragment : Fragment(), TabLayout.OnTabSelectedListener {
             GameViewModelFactory(
                 PlayersPreferencesRepository(requireContext().playersPreferencesStore)
             )
-        ).get(GameViewModel::class.java)
+        )[GameViewModel::class.java]
     }
 
     private val adapter by lazy { GamePagerAdapter(lifecycle, childFragmentManager, viewModel) }

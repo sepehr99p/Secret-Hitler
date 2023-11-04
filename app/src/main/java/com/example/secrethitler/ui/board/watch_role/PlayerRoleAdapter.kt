@@ -1,6 +1,8 @@
 package com.example.secrethitler.ui.board.watch_role
 
 import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.view.ViewGroup
 import androidx.core.os.postDelayed
 import androidx.recyclerview.widget.DiffUtil
@@ -12,8 +14,9 @@ import com.example.secrethitler.ui.utils.ViewHelper.show
 
 class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMPARATOR) {
 
-    var isVisible = false
-    var presidentRoleWatchListener : PresidentRoleWatchListener? = null
+    private var isVisible = false
+    var presidentRoleWatchListener: PresidentRoleWatchListener? = null
+    private val handler = Handler(Looper.getMainLooper())
 
     companion object {
         private val PLAYERS_COMPARATOR = object : DiffUtil.ItemCallback<Player>() {
@@ -50,7 +53,6 @@ class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMP
 
     private fun checkExceptions(holder: PlayerRoleViewHolder) {
         checkHitlerException(holder)
-//        checkMohammadException(holder)
     }
 
     private fun checkHitlerException(holder: PlayerRoleViewHolder) {
@@ -59,18 +61,15 @@ class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMP
         }
     }
 
-//    private fun checkMohammadException(holder: PlayerRoleViewHolder) {
-//        if (holder.binding.playerNameTv.text == "mohammad" || holder.binding.playerNameTv.text == "Mohammad" || holder.binding.playerNameTv.text == "emam") {
-//            holder.binding.playerRoleTv.text = "آناناس"
-//        }
-//    }
-
     private fun startTimer(adapterPosition: Int) {
-        Handler().postDelayed(5000) {
-            isVisible = false
-            presidentRoleWatchListener?.onWatched(getItem(adapterPosition))
-            notifyDataSetChanged()
-        }
+        handler.postDelayed(timerRunnable(adapterPosition), 5000)
+    }
+
+    private fun timerRunnable(adapterPosition: Int) = Runnable {
+        isVisible = false
+        presidentRoleWatchListener?.onWatched(getItem(adapterPosition))
+//            notifyDataSetChanged()
+        notifyItemRemoved(adapterPosition)
     }
 
 
