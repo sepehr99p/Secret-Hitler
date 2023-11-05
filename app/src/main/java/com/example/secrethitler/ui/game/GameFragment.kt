@@ -81,6 +81,9 @@ class GameFragment constructor(
         if (number == 0) {
             handler.post(blinkingRunnable)
         } else {
+            if (number == Int.MAX_VALUE) {
+                number = 0
+            }
             handler.postDelayed(blinkingRunnable,500)
         }
     }
