@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.os.postDelayed
@@ -32,6 +33,23 @@ class GameFragment constructor(
     private var _binding: FragmentGameBinding? = null
     private val players = mutableListOf<String>()
     private val rolesInitList = mutableListOf<ROLE>()
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val fadeOut = AlphaAnimation(0.5f,0.0f).also { it.duration = 500 }
+    private val fadeIn = AlphaAnimation(0.0f,0.5f).also { it.duration = 500 }
+    private var number = 0
+
+    private val  blinkingRunnable = Runnable {
+        binding.playerRoleTextView.clearAnimation()
+        number++
+        if (number % 2 == 0) {
+            binding.playerRoleTextView.startAnimation(fadeIn)
+            startBlinking()
+        } else {
+            binding.playerRoleTextView.startAnimation(fadeOut)
+            startBlinking()
+        }
+    }
 
     enum class LAW {
         LIBERAL,
@@ -57,28 +75,19 @@ class GameFragment constructor(
         super.onViewCreated(view, savedInstanceState)
         initObservers()
         initListeners()
-        setupRoleAnimation()
     }
 
-    private fun setupRoleAnimation() {
-        animateRoleTextView(fadeOut,1)
-    }
-
-    private val fadeOut = AlphaAnimation(0.4f,0.0f)
-    private val fadeIn = AlphaAnimation(0.0f,0.4f)
-
-    private fun animateRoleTextView(alphaAnimation: AlphaAnimation, number : Int) {
-        var myNumber : Int = number
-        alphaAnimation.duration = 500
-        binding.playerRoleTextView.clearAnimation()
-        binding.playerRoleTextView.startAnimation(alphaAnimation)
-        Handler(Looper.getMainLooper()).postDelayed(500) {
-            if (number % 2 == 0) {
-                animateRoleTextView(fadeOut,++myNumber)
-            } else {
-                animateRoleTextView(fadeIn,++myNumber)
-            }
+    private fun startBlinking() {
+        if (number == 0) {
+            handler.post(blinkingRunnable)
+        } else {
+            handler.postDelayed(blinkingRunnable,500)
         }
+    }
+
+    private fun stopBlinking() {
+        handler.removeCallbacks(blinkingRunnable)
+        number = 0
     }
 
     private fun initObservers() {
@@ -112,6 +121,7 @@ class GameFragment constructor(
             playerRoleTextView.hide()
             playerNameTextView.text = viewModel.gamePlayers[viewModel.currentPlayerIndex].name
             watchLawBtn.hide()
+            playerRoleTextView.alpha = 0.5f
         }
     }
 
@@ -259,6 +269,7 @@ class GameFragment constructor(
     }
 
     private fun presentInGameScreen() {
+        stopBlinking()
         binding.playerRoleTextView.hide()
         binding.playerNameTextView.hide()
         binding.watchLawBtn.show()
@@ -266,6 +277,7 @@ class GameFragment constructor(
 
     private fun showRole() {
         with(binding) {
+            startBlinking()
             playerRoleTextView.show()
             playerRoleTextView.text = viewModel.getPlayerRoleText()
             playerRoleTextView.setTextColor(requireContext().resources.getColor(viewModel.getPlayerRoleColor()))
@@ -274,6 +286,7 @@ class GameFragment constructor(
 
     private fun showNextPlayer() {
         with(binding) {
+            stopBlinking()
             playerRoleTextView.hide()
             playerNameTextView.text = viewModel.gamePlayers[viewModel.currentPlayerIndex].name
         }
@@ -313,6 +326,7 @@ class GameFragment constructor(
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        stopBlinking()
     }
 
 }
