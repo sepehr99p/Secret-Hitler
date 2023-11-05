@@ -39,7 +39,7 @@ class PlayersFragment : Fragment() {
     private val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
         ItemTouchHelper.SimpleCallback(
             0,
-            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.DOWN or ItemTouchHelper.UP
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
         ) {
         override fun onMove(
             recyclerView: RecyclerView,
@@ -53,11 +53,47 @@ class PlayersFragment : Fragment() {
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
 //            Toast.makeText(context, "on Swiped ", Toast.LENGTH_SHORT).show()
             //Remove swiped item from list and notify the RecyclerView
-            val position = viewHolder.adapterPosition
-            players.removeAt(position)
-            adapter.submitList(players)
-            adapter.notifyItemRemoved(position)
+            if (swipeDir == ItemTouchHelper.LEFT) {
+                val position = viewHolder.adapterPosition
+                players.removeAt(position)
+                adapter.submitList(players)
+                adapter.notifyItemRemoved(position)
+            }
+            if (swipeDir == ItemTouchHelper.RIGHT) {
+                editCurrentPlayer(viewHolder.adapterPosition)
+            }
         }
+    }
+
+    private fun editCurrentPlayer(adapterPosition: Int) {
+        val bottomSheet = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
+        val bottomSheetBinding = PlayerCreationBottomSheetBinding.inflate(layoutInflater)
+        with(bottomSheetBinding) {
+            bottomSheet.setContentView(root)
+            bottomSheet.behavior.isDraggable = true
+            bottomSheet.behavior.isFitToContents = true
+            addPlayerSubmitBtn.setOnClickListener {
+                players.removeAt(adapterPosition)
+                players.add(adapterPosition,addPlayerNameEt.text.toString())
+//                adapter.submitList(players)
+
+                adapter.notifyItemChanged(adapterPosition)
+                bottomSheet.dismiss()
+            }
+            addPlayerNameEt.setText(adapter.currentList.get(adapterPosition))
+            addPlayerNameEt.setOnEditorActionListener { _, actionId, _ ->
+                var handled = false
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    players.add(addPlayerNameEt.text.toString())
+                    adapter.submitList(players)
+                    adapter.notifyItemInserted(adapter.itemCount + 1)
+                    bottomSheet.dismiss()
+                    handled = true
+                }
+                handled
+            }
+        }
+        bottomSheet.show()
     }
 
     override fun onCreateView(
