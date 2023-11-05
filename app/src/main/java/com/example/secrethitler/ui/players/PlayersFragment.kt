@@ -1,5 +1,9 @@
 package com.example.secrethitler.ui.players
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +21,9 @@ import com.example.secrethitler.data.PlayersPreferencesRepository
 import com.example.secrethitler.databinding.FragmentPlayersBinding
 import com.example.secrethitler.databinding.PlayerCreationBottomSheetBinding
 import com.example.secrethitler.ui.playersPreferencesStore
+import com.google.android.gms.common.util.AndroidUtilsLight
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import java.security.AccessController
 
 
 class PlayersFragment : Fragment() {
@@ -63,7 +69,53 @@ class PlayersFragment : Fragment() {
                 editCurrentPlayer(viewHolder.adapterPosition)
             }
         }
+
+//        override fun onChildDraw(
+//            c: Canvas,
+//            recyclerView: RecyclerView,
+//            viewHolder: RecyclerView.ViewHolder,
+//            dX: Float,
+//            dY: Float,
+//            actionState: Int,
+//            isCurrentlyActive: Boolean
+//        ) {
+//            if (actionState === ItemTouchHelper.ACTION_STATE_SWIPE) {
+//                val itemView = viewHolder.itemView
+//                val paint = Paint()
+//                val bitmap: Bitmap
+//
+//                if (dX > 0) { // swiping right
+//                    paint.color = resources.getColor(R.color.blue)
+//                    c.drawRect(
+//                        itemView.left.toFloat() ,
+//                        itemView.top.toFloat() + 16,
+//                        dX,
+//                        itemView.bottom.toFloat(),
+//                        paint
+//                    )
+//                } else { // swiping left
+//                    paint.color = resources.getColor(R.color.red)
+//                    c.drawRect(
+//                        itemView.right.toFloat() + dX,
+//                        itemView.top.toFloat(),
+//                        itemView.right.toFloat() + 16,
+//                        itemView.bottom.toFloat(),
+//                        paint
+//                    )
+//                }
+//                super.onChildDraw(
+//                    c,
+//                    recyclerView,
+//                    viewHolder,
+//                    dX,
+//                    dY,
+//                    actionState,
+//                    isCurrentlyActive
+//                )
+//            }
+//        }
     }
+
 
     private fun editCurrentPlayer(adapterPosition: Int) {
         val bottomSheet = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)

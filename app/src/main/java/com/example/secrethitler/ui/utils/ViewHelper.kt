@@ -1,6 +1,10 @@
 package com.example.secrethitler.ui.utils
 
 import android.view.View
+import java.security.AccessController.getContext
+
+
+
 
 object ViewHelper {
 
@@ -16,4 +20,5 @@ object ViewHelper {
     fun View.invisible() {
         this.visibility = View.INVISIBLE
     }
+
 }
