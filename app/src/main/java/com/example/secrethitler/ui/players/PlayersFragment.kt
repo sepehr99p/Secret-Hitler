@@ -1,9 +1,5 @@
 package com.example.secrethitler.ui.players
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,9 +17,7 @@ import com.example.secrethitler.data.PlayersPreferencesRepository
 import com.example.secrethitler.databinding.FragmentPlayersBinding
 import com.example.secrethitler.databinding.PlayerCreationBottomSheetBinding
 import com.example.secrethitler.ui.playersPreferencesStore
-import com.google.android.gms.common.util.AndroidUtilsLight
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import java.security.AccessController
 
 
 class PlayersFragment : Fragment() {
@@ -126,13 +120,13 @@ class PlayersFragment : Fragment() {
             bottomSheet.behavior.isFitToContents = true
             addPlayerSubmitBtn.setOnClickListener {
                 players.removeAt(adapterPosition)
-                players.add(adapterPosition,addPlayerNameEt.text.toString())
+                players.add(adapterPosition, addPlayerNameEt.text.toString())
 //                adapter.submitList(players)
 
                 adapter.notifyItemChanged(adapterPosition)
                 bottomSheet.dismiss()
             }
-            addPlayerNameEt.setText(adapter.currentList.get(adapterPosition))
+            addPlayerNameEt.setText(adapter.currentList[adapterPosition])
             addPlayerNameEt.setOnEditorActionListener { _, actionId, _ ->
                 var handled = false
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
