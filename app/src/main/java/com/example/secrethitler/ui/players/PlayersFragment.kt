@@ -54,7 +54,7 @@ class PlayersFragment : Fragment() {
             val toPosition = target.adapterPosition
             Collections.swap(players, fromPosition, toPosition)
             adapter.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
-            adapter.notifyItemRangeChanged(0, players.size)
+//            adapter.notifyItemRangeChanged(0, players.size)
             return true
         }
 
