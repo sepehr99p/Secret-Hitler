@@ -54,7 +54,6 @@ class PlayersFragment : Fragment() {
             val toPosition = target.adapterPosition
             Collections.swap(players, fromPosition, toPosition)
             adapter.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
-//            adapter.notifyItemRangeChanged(0, players.size)
             return true
         }
 
@@ -67,15 +66,10 @@ class PlayersFragment : Fragment() {
                 ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.DOWN or ItemTouchHelper.UP
             val swipeFlags =
                 ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.DOWN or ItemTouchHelper.UP
-
             return makeMovementFlags(dragFlags, swipeFlags)
         }
 
-
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
-//            Toast.makeText(context, "on Swiped ", Toast.LENGTH_SHORT).show()
-            //Remove swiped item from list and notify the RecyclerView
-            Log.i("SEPI", "onSwiped: ")
             if (swipeDir == ItemTouchHelper.LEFT) {
                 val position = viewHolder.adapterPosition
                 players.removeAt(position)
