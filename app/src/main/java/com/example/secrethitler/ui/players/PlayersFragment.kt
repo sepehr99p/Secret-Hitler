@@ -182,7 +182,11 @@ class PlayersFragment : Fragment() {
 
     private fun initListeners() {
         binding.fab.setOnClickListener {
-            presentAddPlayerBottomSheet()
+            if (players.size < 12) {
+                presentAddPlayerBottomSheet()
+            } else {
+                Toast.makeText(requireContext(), "can't add more than 12 players",Toast.LENGTH_LONG).show()
+            }
         }
     }
 
