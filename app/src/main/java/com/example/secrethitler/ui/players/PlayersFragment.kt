@@ -110,7 +110,6 @@ class PlayersFragment : Fragment() {
 //        }
     }
 
-
     private fun editCurrentPlayer(adapterPosition: Int) {
         val bottomSheet = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         val bottomSheetBinding = PlayerCreationBottomSheetBinding.inflate(layoutInflater)
@@ -120,7 +119,7 @@ class PlayersFragment : Fragment() {
             bottomSheet.behavior.isFitToContents = true
             addPlayerSubmitBtn.setOnClickListener {
                 players.removeAt(adapterPosition)
-                players.add(adapterPosition, addPlayerNameEt.text.toString())
+                players.add(adapterPosition,addPlayerNameEt.text.toString())
 //                adapter.submitList(players)
 
                 adapter.notifyItemChanged(adapterPosition)
