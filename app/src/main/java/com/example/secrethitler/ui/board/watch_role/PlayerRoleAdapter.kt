@@ -51,6 +51,13 @@ class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMP
 
     private fun checkExceptions(holder: PlayerRoleViewHolder) {
         checkHitlerException(holder)
+        checkStalinException(holder)
+    }
+
+    private fun checkStalinException(holder: PlayerRoleViewHolder) {
+        if (holder.binding.playerRoleTv.text.contains(ROLE.STALIN.name)) {
+            holder.binding.playerRoleTv.text = ROLE.COMMUNISM.name
+        }
     }
 
     private fun checkHitlerException(holder: PlayerRoleViewHolder) {
