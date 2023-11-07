@@ -1,6 +1,7 @@
 package com.example.secrethitler.ui.players
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.example.secrethitler.databinding.FragmentPlayersBinding
 import com.example.secrethitler.databinding.PlayerCreationBottomSheetBinding
 import com.example.secrethitler.ui.playersPreferencesStore
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import java.util.Collections
 
 
 class PlayersFragment : Fragment() {
@@ -38,22 +40,42 @@ class PlayersFragment : Fragment() {
 
     private val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
         ItemTouchHelper.SimpleCallback(
-            0,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-//            or ItemTouchHelper.DOWN or ItemTouchHelper.UP
+                    or ItemTouchHelper.DOWN or ItemTouchHelper.UP,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+                    or ItemTouchHelper.DOWN or ItemTouchHelper.UP
         ) {
         override fun onMove(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder,
             target: RecyclerView.ViewHolder
         ): Boolean {
-//            adapter.notifyItemMoved(viewHolder.adapterPosition,target.adapterPosition)
-            return false
+            val fromPosition = viewHolder.adapterPosition
+            val toPosition = target.adapterPosition
+            Collections.swap(players, fromPosition, toPosition)
+            adapter.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
+            adapter.notifyItemRangeChanged(0, players.size)
+            return true
         }
+
+
+        override fun getMovementFlags(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder
+        ): Int {
+            val dragFlags =
+                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.DOWN or ItemTouchHelper.UP
+            val swipeFlags =
+                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.DOWN or ItemTouchHelper.UP
+
+            return makeMovementFlags(dragFlags, swipeFlags)
+        }
+
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
 //            Toast.makeText(context, "on Swiped ", Toast.LENGTH_SHORT).show()
             //Remove swiped item from list and notify the RecyclerView
+            Log.i("SEPI", "onSwiped: ")
             if (swipeDir == ItemTouchHelper.LEFT) {
                 val position = viewHolder.adapterPosition
                 players.removeAt(position)
@@ -120,14 +142,14 @@ class PlayersFragment : Fragment() {
             bottomSheet.behavior.isFitToContents = true
             addPlayerSubmitBtn.setOnClickListener {
                 players.removeAt(adapterPosition)
-                players.add(adapterPosition,addPlayerNameEt.text.toString())
+                players.add(adapterPosition, addPlayerNameEt.text.toString())
 //                adapter.submitList(players)
                 adapter.notifyItemChanged(adapterPosition)
                 bottomSheet.dismiss()
             }
             bottomSheet.setOnDismissListener {
                 players.removeAt(adapterPosition)
-                players.add(adapterPosition,addPlayerNameEt.text.toString())
+                players.add(adapterPosition, addPlayerNameEt.text.toString())
                 adapter.notifyItemChanged(adapterPosition)
             }
             addPlayerNameEt.setText(adapter.currentList[adapterPosition])
@@ -190,7 +212,11 @@ class PlayersFragment : Fragment() {
             if (players.size < 12) {
                 presentAddPlayerBottomSheet()
             } else {
-                Toast.makeText(requireContext(), "can't add more than 12 players",Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    "can't add more than 12 players",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
