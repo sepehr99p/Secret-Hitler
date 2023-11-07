@@ -40,13 +40,14 @@ class PlayersFragment : Fragment() {
         ItemTouchHelper.SimpleCallback(
             0,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+//            or ItemTouchHelper.DOWN or ItemTouchHelper.UP
         ) {
         override fun onMove(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder,
             target: RecyclerView.ViewHolder
         ): Boolean {
-//            Toast.makeText(context, "on Move", Toast.LENGTH_SHORT).show()
+//            adapter.notifyItemMoved(viewHolder.adapterPosition,target.adapterPosition)
             return false
         }
 
@@ -121,9 +122,13 @@ class PlayersFragment : Fragment() {
                 players.removeAt(adapterPosition)
                 players.add(adapterPosition,addPlayerNameEt.text.toString())
 //                adapter.submitList(players)
-
                 adapter.notifyItemChanged(adapterPosition)
                 bottomSheet.dismiss()
+            }
+            bottomSheet.setOnDismissListener {
+                players.removeAt(adapterPosition)
+                players.add(adapterPosition,addPlayerNameEt.text.toString())
+                adapter.notifyItemChanged(adapterPosition)
             }
             addPlayerNameEt.setText(adapter.currentList[adapterPosition])
             addPlayerNameEt.setOnEditorActionListener { _, actionId, _ ->
