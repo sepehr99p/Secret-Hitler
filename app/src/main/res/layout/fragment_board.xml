@@ -19,7 +19,7 @@
             android:textColor="@color/red"
             android:layout_gravity="left"
             android:textSize="32sp"
-            android:text="Fascism" />
+            android:text="@string/fascism" />
 
         <TextView
             android:id="@+id/fascism_count"
@@ -42,7 +42,7 @@
             android:textColor="@color/blue"
             android:layout_gravity="left"
             android:textSize="32sp"
-            android:text="Liberal" />
+            android:text="@string/liberal" />
 
         <TextView
             android:id="@+id/liberal_count"
@@ -54,6 +54,29 @@
 
 
     </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/brown"
+            android:layout_gravity="left"
+            android:textSize="32sp"
+            android:text="@string/communism" />
+
+        <TextView
+            android:id="@+id/communism_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="32sp"
+            android:layout_gravity="right" />
+
+    </FrameLayout>
+
 
     <FrameLayout
         android:id="@+id/main_board"

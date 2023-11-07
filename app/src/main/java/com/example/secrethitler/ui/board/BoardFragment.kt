@@ -49,6 +49,7 @@ class BoardFragment constructor(
         with(binding) {
             fascismCount.text = viewModel.fascismSubmittedLaw.size.toString()
             liberalCount.text = viewModel.liberalSubmittedLaw.size.toString()
+            communismCount.text = viewModel.communismSubmittedLaw.size.toString()
         }
         if (viewModel.presidentWatchCount > 0) {
             binding.watchRoleBtn.show()

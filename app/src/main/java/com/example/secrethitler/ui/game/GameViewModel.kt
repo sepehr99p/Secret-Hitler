@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
+import com.example.secrethitler.data.LAW
 import com.example.secrethitler.data.Player
 import com.example.secrethitler.data.PlayersPreferencesRepository
 import com.example.secrethitler.data.ROLE
@@ -23,10 +24,11 @@ class GameViewModel(
     var stalinCount = 0
     var presidentWatchCount = 1
 
-    private val laws by lazy { Stack<GameFragment.LAW>() }
-    val trashLaws = arrayListOf<GameFragment.LAW>()
-    val liberalSubmittedLaw = arrayListOf<GameFragment.LAW>()
-    val fascismSubmittedLaw = arrayListOf<GameFragment.LAW>()
+    private val laws by lazy { Stack<LAW>() }
+    val trashLaws = arrayListOf<LAW>()
+    val liberalSubmittedLaw = arrayListOf<LAW>()
+    val fascismSubmittedLaw = arrayListOf<LAW>()
+    val communismSubmittedLaw = arrayListOf<LAW>()
     var currentPlayerIndex = 0
     val gamePlayers = arrayListOf<Player>()
 
@@ -41,10 +43,15 @@ class GameViewModel(
 
     fun initLaws() {
         repeat(6) {
-            trashLaws.add(GameFragment.LAW.LIBERAL)
+            trashLaws.add(LAW.LIBERAL)
         }
         repeat(11) {
-            trashLaws.add(GameFragment.LAW.FASCISM)
+            trashLaws.add(LAW.FASCISM)
+        }
+        if (gamePlayers.size > 10) {
+            repeat(2) {
+                trashLaws.add(LAW.COMMUNISM)
+            }
         }
         trashLaws.shuffle(Random(System.currentTimeMillis()))
         laws.clear()
@@ -52,11 +59,13 @@ class GameViewModel(
         trashLaws.clear()
     }
 
-    fun submitLaw(last: GameFragment.LAW) {
-        if (last.name == GameFragment.LAW.LIBERAL.name) {
+    fun submitLaw(last: LAW) {
+        if (last.name == LAW.LIBERAL.name) {
             liberalSubmittedLaw.add(last)
-        } else {
+        } else if(last.name == LAW.FASCISM.name) {
             fascismSubmittedLaw.add(last)
+        } else {
+            communismSubmittedLaw.add(last)
         }
         checkGameResult()
     }
@@ -66,10 +75,12 @@ class GameViewModel(
             _whoWon.value = ROLE.LIBERAL
         } else if (fascismSubmittedLaw.size ==6) {
             _whoWon.value = ROLE.FASCISM
+        } else if (communismSubmittedLaw.size == 2 ) {
+            _whoWon.value = ROLE.COMMUNISM
         }
     }
 
-    fun getLaw(): GameFragment.LAW {
+    fun getLaw(): LAW {
         if (laws.isEmpty()) {
             trashLaws.shuffle(Random(System.currentTimeMillis()))
             laws.addAll(trashLaws)

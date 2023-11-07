@@ -17,6 +17,7 @@ import androidx.core.os.postDelayed
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.secrethitler.R
+import com.example.secrethitler.data.LAW
 import com.example.secrethitler.data.Player
 import com.example.secrethitler.data.ROLE
 import com.example.secrethitler.databinding.FragmentGameBinding
@@ -51,10 +52,6 @@ class GameFragment constructor(
         }
     }
 
-    enum class LAW {
-        LIBERAL,
-        FASCISM
-    }
 
     private val binding get() = _binding!!
 
@@ -108,6 +105,8 @@ class GameFragment constructor(
                 icon = R.drawable.fascist_article
             } else if (it == ROLE.LIBERAL) {
                 icon = R.drawable.liberal_article
+            } else if (it == ROLE.COMMUNISM) {
+                icon = R.drawable.communism_article
             }
             AlertDialog.Builder(requireContext())
                 .setTitle(requireContext().resources.getString(R.string.game_over))
@@ -237,8 +236,14 @@ class GameFragment constructor(
             ) as BitmapDrawable).bitmap
         ) {
             LAW.LIBERAL
-        } else {
+        } else if((imageView.drawable as BitmapDrawable).bitmap == (ContextCompat.getDrawable(
+                requireContext(),
+                R.drawable.fascist_article
+            ) as BitmapDrawable).bitmap
+        ) {
             LAW.FASCISM
+        } else {
+            LAW.COMMUNISM
         }
     }
 
@@ -316,11 +321,18 @@ class GameFragment constructor(
                     R.drawable.liberal_article
                 )
             )
-        } else {
+        } else if(viewModel.getLaw() == LAW.LIBERAL) {
             lawIv.setImageDrawable(
                 ContextCompat.getDrawable(
                     requireContext(),
                     R.drawable.fascist_article
+                )
+            )
+        } else {
+            lawIv.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.communism_article
                 )
             )
         }
