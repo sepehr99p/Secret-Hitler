@@ -17,12 +17,16 @@ import com.example.secrethitler.databinding.ActivityMainBinding
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 val Context.playersPreferencesStore: DataStore<PlayerPreferences> by dataStore(
     fileName = "players.pb",
     serializer = PlayerPreferencesSerializer
 )
 
+
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
