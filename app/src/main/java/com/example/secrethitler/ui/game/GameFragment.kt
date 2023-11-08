@@ -36,8 +36,8 @@ class GameFragment constructor(
     private val rolesInitList = mutableListOf<ROLE>()
 
     private val handler = Handler(Looper.getMainLooper())
-    private val fadeOut = AlphaAnimation(0.5f,0.0f).also { it.duration = 500 }
-    private val fadeIn = AlphaAnimation(0.0f,0.5f).also { it.duration = 500 }
+    private val fadeOut = AlphaAnimation(0.7f,0.0f).also { it.duration = 500 }
+    private val fadeIn = AlphaAnimation(0.0f,0.7f).also { it.duration = 500 }
     private var number = 0
 
     private val  blinkingRunnable = Runnable {
@@ -123,7 +123,7 @@ class GameFragment constructor(
             playerRoleTextView.hide()
             playerNameTextView.text = viewModel.gamePlayers[viewModel.currentPlayerIndex].name
             watchLawBtn.hide()
-            playerRoleTextView.alpha = 0.5f
+            playerRoleTextView.alpha = 0.7f
         }
     }
 
@@ -293,8 +293,8 @@ class GameFragment constructor(
     }
 
     private fun showNextPlayer() {
+        stopBlinking()
         with(binding) {
-            stopBlinking()
             playerRoleTextView.hide()
             playerNameTextView.text = viewModel.gamePlayers[viewModel.currentPlayerIndex].name
         }
