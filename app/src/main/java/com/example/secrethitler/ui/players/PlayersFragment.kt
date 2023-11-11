@@ -151,20 +151,25 @@ class PlayersFragment : Fragment() {
             bottomSheet.setContentView(root)
             bottomSheet.behavior.isDraggable = true
             bottomSheet.behavior.isFitToContents = true
+            var forcedDismiss = false
             initPosition?.let {
                 addPlayerNameEt.setText(adapter.currentList[it])
             }
             bottomSheet.setOnDismissListener {
-                bottomSheetListener.onDismiss(addPlayerNameEt.text.toString())
+                if (!forcedDismiss) {
+                    bottomSheetListener.onDismiss(addPlayerNameEt.text.toString())
+                }
             }
             addPlayerSubmitBtn.setOnClickListener {
                 bottomSheetListener.onSubmit(addPlayerNameEt.text.toString())
+                forcedDismiss = true
                 bottomSheet.dismiss()
             }
             addPlayerNameEt.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     bottomSheetListener.onSubmit(addPlayerNameEt.text.toString())
                 }
+                forcedDismiss = true
                 bottomSheet.dismiss()
                 false
             }
