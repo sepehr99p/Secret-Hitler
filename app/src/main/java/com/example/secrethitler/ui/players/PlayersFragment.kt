@@ -201,9 +201,13 @@ class PlayersFragment : Fragment() {
     )
 
     private fun updateAdapterAfterInserting(newName: String) {
-        players.add(newName)
-        adapter.submitList(players)
-        adapter.notifyItemInserted(adapter.itemCount + 1)
+        if (newName.isEmpty()) {
+            Toast.makeText(requireContext(), getString(R.string.empty_name),Toast.LENGTH_LONG).show()
+        } else {
+            players.add(newName)
+            adapter.submitList(players)
+            adapter.notifyItemInserted(adapter.itemCount + 1)
+        }
     }
 
     private fun updateAdapterAfterEdit(newName: String, position: Int) {
