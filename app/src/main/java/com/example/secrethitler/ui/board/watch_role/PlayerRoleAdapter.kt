@@ -12,6 +12,7 @@ import com.example.secrethitler.ui.utils.ViewHelper.show
 
 class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMPARATOR) {
 
+    private val WATCH_ROLE_DELAY: Long = 5000
     private var isVisible = false
     var presidentRoleWatchListener: PresidentRoleWatchListener? = null
     private val handler = Handler(Looper.getMainLooper())
@@ -67,13 +68,12 @@ class PlayerRoleAdapter : ListAdapter<Player, PlayerRoleViewHolder>(PLAYERS_COMP
     }
 
     private fun startTimer(adapterPosition: Int) {
-        handler.postDelayed(timerRunnable(adapterPosition), 5000)
+        handler.postDelayed(timerRunnable(adapterPosition), WATCH_ROLE_DELAY)
     }
 
     private fun timerRunnable(adapterPosition: Int) = Runnable {
         isVisible = false
         presidentRoleWatchListener?.onWatched(getItem(adapterPosition))
-//            notifyDataSetChanged()
         notifyItemRemoved(adapterPosition)
     }
 

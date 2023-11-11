@@ -24,5 +24,4 @@ class PlayersAdapter : ListAdapter<String, PlayerViewHolder>(PLAYERS_COMPARATOR)
         holder.bind(getItem(position))
     }
 
-
 }

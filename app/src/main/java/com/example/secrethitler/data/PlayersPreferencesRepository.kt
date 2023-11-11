@@ -14,7 +14,6 @@ class PlayersPreferencesRepository(private val playerPreferencesDataStore: DataS
 
     val playerPreferencesFlow: Flow<PlayerPreferences> = playerPreferencesDataStore.data
         .catch { exception ->
-            // dataStore.data throws an IOException when an error is encountered when reading data
             if (exception is IOException) {
                 Log.e(TAG, "Error reading sort order preferences.", exception)
                 emit(PlayerPreferences.getDefaultInstance())
@@ -23,7 +22,7 @@ class PlayersPreferencesRepository(private val playerPreferencesDataStore: DataS
             }
         }
 
-    suspend fun updatePlayers(newNames : List<String>) {
+    suspend fun updatePlayers(newNames: List<String>) {
         playerPreferencesDataStore.updateData {
             it.toBuilder()
                 .clearNames()

@@ -51,4 +51,9 @@
     <string name="communism">Communism</string>
     <string name="liberal">Liberal</string>
     <string name="fascism">Fascism</string>
+    <string name="players_count_limit">can\'t add more than 12 players</string>
+    <string name="quit">Quit</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="no">NO</string>
+    <string name="yes">YES</string>
 </resources>

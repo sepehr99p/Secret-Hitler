@@ -11,6 +11,7 @@ import com.example.secrethitler.ui.MainActivity
 class LauncherActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLauncherBinding
+    private val DELAY = 2000L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +27,7 @@ class LauncherActivity : AppCompatActivity() {
                     MainActivity::class.java
                 )
             )
-        }, 2000)
+        }, DELAY)
 
     }
 

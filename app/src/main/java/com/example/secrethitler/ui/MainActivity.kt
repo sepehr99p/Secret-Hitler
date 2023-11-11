@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
         setContentView(binding.root)
 
-        // Obtain the FirebaseAnalytics instance.
         analytics = Firebase.analytics
         analytics.logEvent("LaunchApp",null)
     }

@@ -14,7 +14,7 @@ class PlayerRoleViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
 
-    fun bind(player : Player) {
+    fun bind(player: Player) {
         binding.playerNameTv.text = player.name
         binding.playerRoleTv.text = player.role.toString()
         binding.playerRoleTv.hide()
@@ -22,7 +22,8 @@ class PlayerRoleViewHolder(
 
     companion object {
         fun create(parent: ViewGroup): PlayerRoleViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.player_role_item, parent, false)
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.player_role_item, parent, false)
             val binding = PlayerRoleItemBinding.bind(view)
             return PlayerRoleViewHolder(binding)
         }

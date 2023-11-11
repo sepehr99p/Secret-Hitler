@@ -54,10 +54,10 @@ class MainTabFragment : Fragment(), TabLayout.OnTabSelectedListener {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     AlertDialog.Builder(requireContext())
-                        .setTitle("Quit")
-                        .setMessage("Are you sure?")
-                        .setNegativeButton("NO") { _, _ -> }
-                        .setPositiveButton("YES") { _, _ ->
+                        .setTitle(getString(R.string.quit))
+                        .setMessage(getString(R.string.are_you_sure))
+                        .setNegativeButton(getString(R.string.no)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.yes)) { _, _ ->
                             val bundle = Bundle()
                             bundle.putBoolean("reset", true)
                             findNavController().navigate(
@@ -77,7 +77,6 @@ class MainTabFragment : Fragment(), TabLayout.OnTabSelectedListener {
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
-        Log.i("TAG", "onTabSelected: ")
         tab?.let { _tab ->
             if (_tab.position != 0) {
                 if (MainActivity.rolesAreWatched) {

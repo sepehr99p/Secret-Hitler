@@ -97,15 +97,3 @@ class GameViewModel @Inject constructor(
 
 }
 
-class GameViewModelFactory(
-    private val playersPreferencesRepository: PlayersPreferencesRepository
-) : ViewModelProvider.Factory {
-
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(GameViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return GameViewModel(playersPreferencesRepository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}

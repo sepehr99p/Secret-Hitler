@@ -2,7 +2,6 @@ package com.example.secrethitler.ui.players
 
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.secrethitler.data.PlayersPreferencesRepository
@@ -12,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlayersViewModel @Inject constructor(
-     private val playersPreferencesRepository: PlayersPreferencesRepository
+    private val playersPreferencesRepository: PlayersPreferencesRepository
 ) : ViewModel() {
 
     val initialSetupEvent = liveData {

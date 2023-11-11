@@ -5,7 +5,6 @@ import androidx.datastore.core.DataStore
 import com.codelab.android.datastore.PlayerPreferences
 import com.example.secrethitler.data.PlayersPreferencesRepository
 import com.example.secrethitler.ui.game.GameViewModel
-import com.example.secrethitler.ui.game.GameViewModelFactory
 import com.example.secrethitler.ui.players.PlayersViewModel
 import com.example.secrethitler.ui.playersPreferencesStore
 import dagger.Module
@@ -23,7 +22,7 @@ object AppModule {
     @Singleton
     @Provides
     fun provideGameViewModel(playersPreferencesRepository: PlayersPreferencesRepository): GameViewModel =
-        GameViewModelFactory(playersPreferencesRepository).create(GameViewModel::class.java)
+        GameViewModel(playersPreferencesRepository)
 
     @Singleton
     @Provides

@@ -1,7 +1,6 @@
 package com.example.secrethitler.ui.players
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,16 +8,13 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.secrethitler.R
-import com.example.secrethitler.data.PlayersPreferencesRepository
 import com.example.secrethitler.databinding.FragmentPlayersBinding
 import com.example.secrethitler.databinding.PlayerCreationBottomSheetBinding
-import com.example.secrethitler.ui.playersPreferencesStore
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Collections
@@ -76,50 +72,6 @@ class PlayersFragment : Fragment() {
             }
         }
 
-//        override fun onChildDraw(
-//            c: Canvas,
-//            recyclerView: RecyclerView,
-//            viewHolder: RecyclerView.ViewHolder,
-//            dX: Float,
-//            dY: Float,
-//            actionState: Int,
-//            isCurrentlyActive: Boolean
-//        ) {
-//            if (actionState === ItemTouchHelper.ACTION_STATE_SWIPE) {
-//                val itemView = viewHolder.itemView
-//                val paint = Paint()
-//                val bitmap: Bitmap
-//
-//                if (dX > 0) { // swiping right
-//                    paint.color = resources.getColor(R.color.blue)
-//                    c.drawRect(
-//                        itemView.left.toFloat() ,
-//                        itemView.top.toFloat() + 16,
-//                        dX,
-//                        itemView.bottom.toFloat(),
-//                        paint
-//                    )
-//                } else { // swiping left
-//                    paint.color = resources.getColor(R.color.red)
-//                    c.drawRect(
-//                        itemView.right.toFloat() + dX,
-//                        itemView.top.toFloat(),
-//                        itemView.right.toFloat() + 16,
-//                        itemView.bottom.toFloat(),
-//                        paint
-//                    )
-//                }
-//                super.onChildDraw(
-//                    c,
-//                    recyclerView,
-//                    viewHolder,
-//                    dX,
-//                    dY,
-//                    actionState,
-//                    isCurrentlyActive
-//                )
-//            }
-//        }
     }
 
     private fun editCurrentPlayer(adapterPosition: Int) {
@@ -132,7 +84,6 @@ class PlayersFragment : Fragment() {
             addPlayerSubmitBtn.setOnClickListener {
                 players.removeAt(adapterPosition)
                 players.add(adapterPosition, addPlayerNameEt.text.toString())
-//                adapter.submitList(players)
                 adapter.notifyItemChanged(adapterPosition)
                 bottomSheet.dismiss()
             }
@@ -203,7 +154,7 @@ class PlayersFragment : Fragment() {
             } else {
                 Toast.makeText(
                     requireContext(),
-                    "can't add more than 12 players",
+                    getString(R.string.players_count_limit),
                     Toast.LENGTH_LONG
                 ).show()
             }
