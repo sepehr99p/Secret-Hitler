@@ -29,18 +29,27 @@ import kotlin.random.Random
 @AndroidEntryPoint
 class GameFragment : Fragment() {
 
+    companion object {
+        private const val ANIMATION_DURATION = 500L
+        private const val FADE_IN_ALPHA = 0.7f
+        private const val FADE_OUT_ALPHA = 0.7f
+    }
+
     private var _binding: FragmentGameBinding? = null
     private val players = mutableListOf<String>()
     private val rolesInitList = mutableListOf<ROLE>()
 
-    private val viewModel : GameViewModel by viewModels()
+    private val viewModel: GameViewModel by viewModels()
 
     private val handler = Handler(Looper.getMainLooper())
-    private val fadeOut = AlphaAnimation(0.7f,0.0f).also { it.duration = 500 }
-    private val fadeIn = AlphaAnimation(0.0f,0.7f).also { it.duration = 500 }
+
+    private val fadeOut =
+        AlphaAnimation(FADE_IN_ALPHA, FADE_OUT_ALPHA).also { it.duration = ANIMATION_DURATION }
+    private val fadeIn =
+        AlphaAnimation(FADE_OUT_ALPHA, FADE_IN_ALPHA).also { it.duration = ANIMATION_DURATION }
     private var number = 0
 
-    private val  blinkingRunnable = Runnable {
+    private val blinkingRunnable = Runnable {
         binding.playerRoleTextView.clearAnimation()
         number++
         if (number % 2 == 0) {
@@ -52,13 +61,7 @@ class GameFragment : Fragment() {
         }
     }
 
-
     private val binding get() = _binding!!
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,7 +84,7 @@ class GameFragment : Fragment() {
             if (number == Int.MAX_VALUE) {
                 number = 0
             }
-            handler.postDelayed(blinkingRunnable,500)
+            handler.postDelayed(blinkingRunnable, ANIMATION_DURATION)
         }
     }
 
@@ -99,8 +102,8 @@ class GameFragment : Fragment() {
             initView()
         }
         viewModel.whoWon.observe(viewLifecycleOwner) {
-            (activity as MainActivity).analytics.logEvent(it.name,null)
-            var icon : Int = R.drawable.liberal_article
+            (activity as MainActivity).analytics.logEvent(it.name, null)
+            var icon: Int = R.drawable.liberal_article
             if (it == ROLE.FASCISM) {
                 icon = R.drawable.fascist_article
             } else if (it == ROLE.LIBERAL) {
@@ -123,7 +126,7 @@ class GameFragment : Fragment() {
             playerRoleTextView.hide()
             playerNameTextView.text = viewModel.gamePlayers[viewModel.currentPlayerIndex].name
             watchLawBtn.hide()
-            playerRoleTextView.alpha = 0.7f
+            playerRoleTextView.alpha = FADE_IN_ALPHA
         }
     }
 
@@ -138,15 +141,19 @@ class GameFragment : Fragment() {
         createRole(fascismCount, ROLE.FASCISM)
         createRole(liberalCount, ROLE.LIBERAL)
         createRole(1, ROLE.HITLER)
-        rolesInitList.shuffle(Random(System.currentTimeMillis()))
-        players.shuffle(Random(System.currentTimeMillis() / 3))
         initFinalPlayerList()
     }
 
     private fun initFinalPlayerList() {
+        shuffleLists()
         for (i in 0 until players.size) {
             viewModel.gamePlayers.add(Player(players.removeLast(), rolesInitList.removeLast()))
         }
+    }
+
+    private fun shuffleLists() {
+        rolesInitList.shuffle(Random(System.currentTimeMillis()))
+        players.shuffle(Random(System.currentTimeMillis() / 3))
     }
 
     private fun createRole(count: Int, role: ROLE) {
@@ -164,7 +171,6 @@ class GameFragment : Fragment() {
                     stalinCount = 1
                     fascismCount = 3
                     liberalsCount = players.size - hitlerCount - fascismCount
-                    initRoles(communismCount, stalinCount, fascismCount, liberalsCount)
                 }
 
                 11 -> {
@@ -230,20 +236,24 @@ class GameFragment : Fragment() {
     }
 
     private fun getLawValue(imageView: ImageView): LAW {
-        return if ((imageView.drawable as BitmapDrawable).bitmap == (ContextCompat.getDrawable(
+        return when ((imageView.drawable as BitmapDrawable).bitmap) {
+            (ContextCompat.getDrawable(
                 requireContext(),
                 R.drawable.liberal_article
-            ) as BitmapDrawable).bitmap
-        ) {
-            LAW.LIBERAL
-        } else if((imageView.drawable as BitmapDrawable).bitmap == (ContextCompat.getDrawable(
+            ) as BitmapDrawable).bitmap -> {
+                LAW.LIBERAL
+            }
+
+            (ContextCompat.getDrawable(
                 requireContext(),
                 R.drawable.fascist_article
-            ) as BitmapDrawable).bitmap
-        ) {
-            LAW.FASCISM
-        } else {
-            LAW.COMMUNISM
+            ) as BitmapDrawable).bitmap -> {
+                LAW.FASCISM
+            }
+
+            else -> {
+                LAW.COMMUNISM
+            }
         }
     }
 
@@ -321,7 +331,7 @@ class GameFragment : Fragment() {
                     R.drawable.liberal_article
                 )
             )
-        } else if(viewModel.getLaw() == LAW.LIBERAL) {
+        } else if (viewModel.getLaw() == LAW.LIBERAL) {
             lawIv.setImageDrawable(
                 ContextCompat.getDrawable(
                     requireContext(),
