@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -19,24 +20,18 @@ import com.example.secrethitler.databinding.FragmentPlayersBinding
 import com.example.secrethitler.databinding.PlayerCreationBottomSheetBinding
 import com.example.secrethitler.ui.playersPreferencesStore
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Collections
 
 
+@AndroidEntryPoint
 class PlayersFragment : Fragment() {
 
     private var _binding: FragmentPlayersBinding? = null
     private val binding get() = _binding!!
     private val adapter by lazy { PlayersAdapter() }
     private val players = arrayListOf<String>()
-    private val viewModel: PlayersViewModel by lazy {
-        ViewModelProvider(
-            this,
-            PlayersViewModelFactory(
-                PlayersPreferencesRepository(requireContext().playersPreferencesStore)
-            )
-        )[PlayersViewModel::class.java]
-    }
-
+    private val viewModel: PlayersViewModel by viewModels()
 
     private val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
         ItemTouchHelper.SimpleCallback(

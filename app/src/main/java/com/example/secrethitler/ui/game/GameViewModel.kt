@@ -1,6 +1,5 @@
 package com.example.secrethitler.ui.game
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,10 +9,13 @@ import com.example.secrethitler.data.LAW
 import com.example.secrethitler.data.Player
 import com.example.secrethitler.data.PlayersPreferencesRepository
 import com.example.secrethitler.data.ROLE
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Stack
+import javax.inject.Inject
 import kotlin.random.Random
 
-class GameViewModel(
+@HiltViewModel
+class GameViewModel @Inject constructor(
     private val playersPreferencesRepository: PlayersPreferencesRepository
 ) : ViewModel() {
 

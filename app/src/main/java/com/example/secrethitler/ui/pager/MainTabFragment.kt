@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.secrethitler.R
@@ -19,24 +20,15 @@ import com.example.secrethitler.ui.game.GameViewModelFactory
 import com.example.secrethitler.ui.playersPreferencesStore
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainTabFragment : Fragment(), TabLayout.OnTabSelectedListener {
 
     private var _binding: FragmentMainTabBinding? = null
     private val binding get() = _binding!!
 
-
-    private val viewModel: GameViewModel by lazy {
-        ViewModelProvider(
-            this,
-            GameViewModelFactory(
-                PlayersPreferencesRepository(requireContext().playersPreferencesStore)
-            )
-        )[GameViewModel::class.java]
-    }
-
-    private val adapter by lazy { GamePagerAdapter(lifecycle, childFragmentManager, viewModel) }
+    private val adapter by lazy { GamePagerAdapter(lifecycle, childFragmentManager) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

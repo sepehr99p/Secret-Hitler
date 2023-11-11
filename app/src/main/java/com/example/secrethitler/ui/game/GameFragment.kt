@@ -5,17 +5,15 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
-import androidx.core.os.postDelayed
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.secrethitler.R
 import com.example.secrethitler.data.LAW
 import com.example.secrethitler.data.Player
@@ -25,15 +23,17 @@ import com.example.secrethitler.ui.MainActivity
 import com.example.secrethitler.ui.utils.ViewHelper.hide
 import com.example.secrethitler.ui.utils.ViewHelper.invisible
 import com.example.secrethitler.ui.utils.ViewHelper.show
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.random.Random
 
-class GameFragment constructor(
-    private val viewModel: GameViewModel
-) : Fragment() {
+@AndroidEntryPoint
+class GameFragment : Fragment() {
 
     private var _binding: FragmentGameBinding? = null
     private val players = mutableListOf<String>()
     private val rolesInitList = mutableListOf<ROLE>()
+
+    private val viewModel : GameViewModel by viewModels()
 
     private val handler = Handler(Looper.getMainLooper())
     private val fadeOut = AlphaAnimation(0.7f,0.0f).also { it.duration = 500 }

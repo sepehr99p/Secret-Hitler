@@ -6,15 +6,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.secrethitler.data.PlayersPreferencesRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-data class PlayersUiModel(
-    val players: List<String>
-)
-
-
-class PlayersViewModel(
-    private val playersPreferencesRepository: PlayersPreferencesRepository
+@HiltViewModel
+class PlayersViewModel @Inject constructor(
+     private val playersPreferencesRepository: PlayersPreferencesRepository
 ) : ViewModel() {
 
     val initialSetupEvent = liveData {
@@ -31,15 +29,3 @@ class PlayersViewModel(
 
 }
 
-class PlayersViewModelFactory(
-    private val playersPreferencesRepository: PlayersPreferencesRepository
-) : ViewModelProvider.Factory {
-
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(PlayersViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return PlayersViewModel(playersPreferencesRepository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}

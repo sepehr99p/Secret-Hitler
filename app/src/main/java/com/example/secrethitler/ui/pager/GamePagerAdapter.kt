@@ -11,17 +11,16 @@ import com.example.secrethitler.ui.game.GameViewModel
 
 class GamePagerAdapter(
     lifecycle: Lifecycle,
-    fragmentManager: FragmentManager,
-    private val viewModel: GameViewModel
+    fragmentManager: FragmentManager
 ) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
     override fun getItemCount(): Int = 2
 
     override fun createFragment(position: Int): Fragment {
         return if (position == 0) {
-            GameFragment(viewModel)
+            GameFragment()
         } else {
-            BoardFragment(viewModel)
+            BoardFragment()
         }
     }
 
