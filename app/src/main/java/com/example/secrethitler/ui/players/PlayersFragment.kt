@@ -1,6 +1,7 @@
 package com.example.secrethitler.ui.players
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,51 +62,16 @@ class PlayersFragment : Fragment() {
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+            val position = viewHolder.adapterPosition
             if (swipeDir == ItemTouchHelper.LEFT) {
-                val position = viewHolder.adapterPosition
                 players.removeAt(position)
                 adapter.submitList(players)
                 adapter.notifyItemRemoved(position)
             }
             if (swipeDir == ItemTouchHelper.RIGHT) {
-                editCurrentPlayer(viewHolder.adapterPosition)
+                editPlayer(position)
             }
         }
-
-    }
-
-    private fun editCurrentPlayer(adapterPosition: Int) {
-        val bottomSheet = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
-        val bottomSheetBinding = PlayerCreationBottomSheetBinding.inflate(layoutInflater)
-        with(bottomSheetBinding) {
-            bottomSheet.setContentView(root)
-            bottomSheet.behavior.isDraggable = true
-            bottomSheet.behavior.isFitToContents = true
-            addPlayerSubmitBtn.setOnClickListener {
-                players.removeAt(adapterPosition)
-                players.add(adapterPosition, addPlayerNameEt.text.toString())
-                adapter.notifyItemChanged(adapterPosition)
-                bottomSheet.dismiss()
-            }
-            bottomSheet.setOnDismissListener {
-                players.removeAt(adapterPosition)
-                players.add(adapterPosition, addPlayerNameEt.text.toString())
-                adapter.notifyItemChanged(adapterPosition)
-            }
-            addPlayerNameEt.setText(adapter.currentList[adapterPosition])
-            addPlayerNameEt.setOnEditorActionListener { _, actionId, _ ->
-                var handled = false
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    players.add(addPlayerNameEt.text.toString())
-                    adapter.submitList(players)
-                    adapter.notifyItemInserted(adapter.itemCount + 1)
-                    bottomSheet.dismiss()
-                    handled = true
-                }
-                handled
-            }
-        }
-        bottomSheet.show()
     }
 
     override fun onCreateView(
@@ -150,7 +116,7 @@ class PlayersFragment : Fragment() {
     private fun initListeners() {
         binding.fab.setOnClickListener {
             if (players.size < 12) {
-                presentAddPlayerBottomSheet()
+                addNewPlayer()
             } else {
                 Toast.makeText(
                     requireContext(),
@@ -175,32 +141,70 @@ class PlayersFragment : Fragment() {
         _binding = null
     }
 
-    private fun presentAddPlayerBottomSheet() {
+    private fun presentBottomSheet(
+        bottomSheetListener: BottomSheetListener,
+        initPosition: Int?
+    ) {
         val bottomSheet = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         val bottomSheetBinding = PlayerCreationBottomSheetBinding.inflate(layoutInflater)
         with(bottomSheetBinding) {
             bottomSheet.setContentView(root)
             bottomSheet.behavior.isDraggable = true
             bottomSheet.behavior.isFitToContents = true
+            initPosition?.let {
+                addPlayerNameEt.setText(adapter.currentList[it])
+            }
+            bottomSheet.setOnDismissListener {
+                bottomSheetListener.onDismiss(addPlayerNameEt.text.toString())
+            }
             addPlayerSubmitBtn.setOnClickListener {
-                players.add(addPlayerNameEt.text.toString())
-                adapter.submitList(players)
-                adapter.notifyItemInserted(adapter.itemCount + 1)
+                bottomSheetListener.onSubmit(addPlayerNameEt.text.toString())
                 bottomSheet.dismiss()
             }
             addPlayerNameEt.setOnEditorActionListener { _, actionId, _ ->
-                var handled = false
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    players.add(addPlayerNameEt.text.toString())
-                    adapter.submitList(players)
-                    adapter.notifyItemInserted(adapter.itemCount + 1)
-                    bottomSheet.dismiss()
-                    handled = true
+                    bottomSheetListener.onSubmit(addPlayerNameEt.text.toString())
                 }
-                handled
+                bottomSheet.dismiss()
+                false
             }
         }
         bottomSheet.show()
+    }
+
+    private fun addNewPlayer() = presentBottomSheet(object : BottomSheetListener {
+        override fun onSubmit(newName: String) {
+            updateAdapterAfterInserting(newName)
+        }
+
+        override fun onDismiss(newName: String) {
+
+        }
+    }, null)
+
+    private fun editPlayer(position: Int) = presentBottomSheet(
+        object : BottomSheetListener {
+            override fun onSubmit(newName: String) {
+                updateAdapterAfterEdit(newName, position)
+            }
+
+            override fun onDismiss(newName: String) {
+                updateAdapterAfterEdit(newName, position)
+            }
+        },
+        initPosition = position
+    )
+
+    private fun updateAdapterAfterInserting(newName: String) {
+        players.add(newName)
+        adapter.submitList(players)
+        adapter.notifyItemInserted(adapter.itemCount + 1)
+    }
+
+    private fun updateAdapterAfterEdit(newName: String, position: Int) {
+        players.removeAt(position)
+        players.add(position, newName)
+        adapter.notifyItemChanged(position)
     }
 
 
