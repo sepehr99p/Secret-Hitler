@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.secrethitler.R
 import com.example.secrethitler.databinding.FragmentPlayersBinding
 import com.example.secrethitler.databinding.PlayerCreationBottomSheetBinding
+import com.example.secrethitler.ui.utils.Constants.MAX_PLAYERS_COUNT
+import com.example.secrethitler.ui.utils.Constants.MIN_PLAYERS_COUNT
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Collections
@@ -91,7 +93,7 @@ class PlayersFragment : Fragment() {
             0
         ).versionName
         binding.playBtn.setOnClickListener {
-            if ((players.size >= 5) && (players.size <= 12)) {
+            if ((players.size >= MIN_PLAYERS_COUNT) && (players.size <= MAX_PLAYERS_COUNT)) {
                 viewModel.updatePlayersList(players)
                 findNavController().navigate(R.id.action_FirstFragment_to_MainTabFragment)
             } else {
@@ -115,7 +117,7 @@ class PlayersFragment : Fragment() {
 
     private fun initListeners() {
         binding.fab.setOnClickListener {
-            if (players.size < 12) {
+            if (players.size < MAX_PLAYERS_COUNT) {
                 addNewPlayer()
             } else {
                 Toast.makeText(
