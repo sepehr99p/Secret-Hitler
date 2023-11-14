@@ -13,7 +13,8 @@
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            app:destination="@id/SecondFragment"
+            app:enterAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -23,6 +24,7 @@
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            app:destination="@id/FirstFragment"
+            app:enterAnim="@android:anim/fade_in" />
     </fragment>
 </navigation>
