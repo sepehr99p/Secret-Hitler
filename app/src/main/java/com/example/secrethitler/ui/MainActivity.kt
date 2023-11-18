@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         analytics = Firebase.analytics
-        analytics.logEvent("LaunchApp",null)
+        analytics.logEvent("LaunchApp", Bundle(ClassLoader.getSystemClassLoader()))
     }
 
 
