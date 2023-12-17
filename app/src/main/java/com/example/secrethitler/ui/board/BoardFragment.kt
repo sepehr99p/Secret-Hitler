@@ -39,8 +39,9 @@ class BoardFragment : Fragment() {
     private fun initListeners() {
         with(binding) {
             watchRoleBtn.setOnClickListener {
-                viewModel.presidentWatchCount--
-                presentWatchRoleBottomSheet()
+                if (viewModel.presidentWatchCount > 0) {
+                    presentWatchRoleBottomSheet()
+                }
             }
         }
     }
@@ -59,6 +60,7 @@ class BoardFragment : Fragment() {
 
 
     private fun presentWatchRoleBottomSheet() {
+        viewModel.presidentWatchCount--
         val bottomSheet = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         with(WatchRoleBottomSheetBinding.inflate(layoutInflater)) {
             bottomSheet.setContentView(root)
